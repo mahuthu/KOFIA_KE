@@ -6,6 +6,10 @@ import Footer from '../components/Footer'
 import Announcement from '../components/Announcement'
 import { Add, Remove } from '@material-ui/icons'
 import { mobile } from '../responsive'
+import { useLocation } from 'react-router'
+import { useEffect, useState } from 'react'
+import {publicRequest} from "../requestmethods"
+
 
 
 const Container = styled.div``
@@ -119,52 +123,68 @@ const Button = styled.button`
 
 
 const Product = () => {
-  return (
-    <Container>
-        <Navbar/>
-        <Announcement/>
-        <Wrapper>
-            <ImgContainer>
-                <Image src='https://cdn.shoplightspeed.com/shops/606243/files/042080839/325x375x2/image.jpg'/>
-            </ImgContainer>
-            <InfoContainer>
-                <Title>MLB/NEWERA</Title>
-                <Desc>Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis nobis sequi, quos harum deleniti, aut reiciendis omnis ut similique rem amet animi architecto possimus et, earum hic magnam voluptate velit.</Desc>
-                <Price>$ 20</Price>
-                <FilterContainer>
-                <Filter>
-                    <FilterTitle>Color</FilterTitle>
-                    <FilterColor color='black'/>
-                    <FilterColor color='darkblue'/>
-                    <FilterColor color='gray'/>
-                </Filter>
-                <Filter>
-                    <FilterTitle>Size</FilterTitle>
-                    <FilterSize>
-                    <FilterSizeOption>XS</FilterSizeOption>
-                    <FilterSizeOption>S</FilterSizeOption>
-                    <FilterSizeOption>M</FilterSizeOption>
-                    <FilterSizeOption>L</FilterSizeOption>
-                    <FilterSizeOption>XL</FilterSizeOption>
-                    <FilterSizeOption>XXL</FilterSizeOption>
-                    </FilterSize>
-                </Filter>
-                </FilterContainer>
-                <AddContainer>
-                <AmountContainer>
-                    <Remove/>
-                    <Amount>1</Amount>
-                    <Add/>
-                </AmountContainer>
-                <Button>ADD TO CART</Button>
-                </AddContainer>
-            </InfoContainer>
-        </Wrapper>
-        <Newsletter/>
-        <Footer/>
+    const location = useLocation();
+    const id = location.pathname.split("/")[2];
+    const [product, setProduct] = useState({});
 
-    </Container>
-  )
-}
+    useEffect(() => {
+        const getProduct = async () => {
+            try {
+                const res =await publicRequest.get("/products/find/" + id); // publicRequest is a function that makes a get request to the specified url
+                setProduct(res.data);
+            } catch (err) {}
+        };
+        getProduct();
+    } ,[id]
+    );
+
+    return(
+        <Container>
+            <Navbar/>
+            <Announcement/>
+            <Wrapper>
+                <ImgContainer>
+                    <Image src= {product.img}/>
+                </ImgContainer>
+                <InfoContainer>
+                    <Title>{product.title}</Title>
+                    <Desc>{product.desc}</Desc>
+                    <Price>{product.price}</Price>
+                    <FilterContainer>
+                    <Filter>
+                        <FilterTitle>Color</FilterTitle>
+                        {product.color.map((c)=>
+                        (<FilterColor color={c} key = {c}/>
+                        ))}
+
+                    </Filter>
+                    <Filter>
+                        <FilterTitle>Size</FilterTitle>
+                        <FilterSize>
+                            {product.size.map((s)=>
+                            (<FilterSizeOption key = 
+                            
+                            {s}>{s}</FilterSizeOption>))}
+                        
+                        
+                        </FilterSize>
+                    </Filter>
+                    </FilterContainer>
+                    <AddContainer>
+                    <AmountContainer>
+                        <Remove/>
+                        <Amount>1</Amount>
+                        <Add/>
+                    </AmountContainer>
+                    <Button>ADD TO CART</Button>
+                    </AddContainer>
+                </InfoContainer>
+            </Wrapper>
+            <Newsletter/>
+            <Footer/>
+
+        </Container>
+    )
+    };
 
 export default Product

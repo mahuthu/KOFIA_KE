@@ -29,19 +29,19 @@ export const sliderItems = [
       id: 1,
       img: "https://cdn.shopify.com/s/files/1/0601/2554/4675/files/60487897_59FIFTY_LIFESTYLEENERGY_PITPIR_OTC_F.jpg?v=1696340935",
       title: "Fitted!",
-      cat : "Fitted"
+      cat : "fitted"
     },
     {
       id: 2,
       img: "https://cdn.shopify.com/s/files/1/0601/2554/4675/files/60430514_9TWENTY_LIFESTYLEENERGY_CHIWHI_OTC_F.jpg?v=1696536771",
       title: "Adjustable",
-      cat : "Adjustable"
+      cat : "adjustable"
     },
     {
       id: 3,
       img: "https://www.neweracap.com/cdn/shop/products/60405818_BUCKET_EVERGREEN_DETTIG_OTCOTCOTC_F.png?v=1687367774",
       title: "Bucket",
-      cat : "Bucket"
+      cat : "bucket"
     },
   ];
 

@@ -1,7 +1,12 @@
 import styled from 'styled-components';
 import React from 'react'
-import { popularProducts } from '../data';
+//import { popularProducts } from '../data';
 import Product from './Product';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+
+
+
 
 const Container = styled.div`
     padding: 20px;
@@ -10,57 +15,58 @@ const Container = styled.div`
     justify-content: space-between;
     `;
 
-const Products = ({cat, filters, sort}) => {
+const Products = ({cat, filters, sort}) => { // cat, filters, sort are props
 
-  const [products, setProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [products, setProducts] = useState([]);  // useState is a hook that allows you to have state variables in functional components. 
+  const [filteredProducts, setFilteredProducts] = useState([]); //
   useEffect(() => {
-    cat ? setFilteredProducts(popularProducts.filter(item => item.cat === cat)) :
-    setFilteredProducts(popularProducts);
+   const getProducts = async () => {
+      try {
+        const res = await axios.get(
+          cat
+            ? `http://localhost:5000/api/product?category=${cat}`
+            : "http://localhost:5000/api/product"
+        );
+        setProducts(res.data);
+      } catch (err) {}
+    };
+    getProducts();
   }, [cat])
 
   useEffect(() => {
-    cat && setFilteredProducts(popularProducts.filter(item => item.cat === cat))
-  }, [cat])
+    cat && setFilteredProducts(products.filter(item => Object.entries(filters).every(([key, value]) =>
+     item[key].includes(value))));
+  }, [products, cat, filters])
 
   useEffect(() => {
-    setFilteredProducts(() => {
-      if(sort === "newest") {
-        return filteredProducts.sort((a,b) => a.id - b.id);
+      if (sort === "newest") {
+        setFilteredProducts((prev) =>
+          [...prev].sort((a, b) => a.createdAt - b.createdAt)
+        );
       }
-      if(sort === "asc") {
-        return filteredProducts.sort((a,b) => a.price - b.price);
+      else if (sort === "asc") {
+        setFilteredProducts((prev) =>
+          [...prev].sort((a, b) => a.price - b.price)
+        );
       }
-      if(sort === "desc") {
-        return filteredProducts.sort((a,b) => b.price - a.price);
+      else {
+        setFilteredProducts((prev) =>
+          [...prev].sort((a, b) => b.price - a.price)
+        );
       }
-      return filteredProducts;
-    })
-  }
-  , [sort, cat])
+  },[sort])
 
-  useEffect(() => {
-    setFilteredProducts(() => {
-      return popularProducts.filter(item => {
-        for (const key in filters) {
-          if (item[key] !== filters[key]) {
-            return false;
-          }
-        }
-        return true;
-      })
-    })
-  }
-  , [filters])
+  
 
   
   return (
     <Container>
-        {popularProducts.map((item) => (
-          <Product item={item} key={item.id}/>
-        ))}
+        { cat 
+        ? filteredProducts.map((item) => (<Product item={item} key={item.id}/>))
+        : products.slice(0, 8).map((item) => (<Product item={item} key={item.id}/>))}
+        
     </Container>
-  )
-}
+    );
+};
 
 export default Products
