@@ -10,6 +10,8 @@ import {useState} from "react"
 
 
 
+
+
 const Container = styled.div``;
 
 const Title = styled.h1`
@@ -42,6 +44,7 @@ const Option = styled.option``;
 
 const ProductList = () => {
   const location = useLocation();
+  console.log(location)
   const cat = location.pathname.split("/")[2];
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState("newest");
