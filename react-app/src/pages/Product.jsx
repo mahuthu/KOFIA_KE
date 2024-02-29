@@ -14,7 +14,7 @@ import {publicRequest} from "../requestmethods"
 
 const Container = styled.div``
 
-const Wrapper = styled.div`
+const Wrapper = styled.div` 
     padding: 50px;
     display: flex;
     ${mobile({padding: "10px", flexDirection: "column"})}
@@ -153,8 +153,8 @@ const Product = () => {
                     <FilterContainer>
                     <Filter>
                         <FilterTitle>Color</FilterTitle>
-                        {product.color.map((c)=>
-                        (<FilterColor color={c} key = {c}/>
+                        {Object.keys(product.color).map((key) => (
+                        <FilterColor color={product.color[key]} key={key} />
                         ))}
 
                     </Filter>

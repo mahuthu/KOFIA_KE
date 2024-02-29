@@ -52,34 +52,27 @@ router.get("/find/:id", async (req, res) => {
 
 //GET ALL PRODUCTS
 router.get("/", async (req, res) => {
-    const qNew = req.query.new; // ?new=true. If we want to get the latest product. 
-    const qCategory = req.query.category; // ?category=fruits. If we want to get products by category
-    try{
-        let products;
-        if(qNew){ //if qNew is true, get the latest product
-            products = await Product.find().sort({createdAt: -1}).limit(1); //sort by createdAt in descending order. limit to 1
-        } else if(qCategory){    //if qCategory is true, get products by category
-            products = await Product.find({       //find products by category
-                categories: {
-                    $in: [qCategory], //find products that have the category. $in is a mongoDB operator. it is used to find products that have the category
-                },
-            });
-      
-        } else {
-            products = await Product.find(); //if qNew and qCategory are false, get all products
-        }
-        res.status(200).json(products);
-    } catch(err){
-        res.status(500).json(err);
+    const qNew = req.query.new;
+    const qCategory = req.query.category;
+    try {
+      let products;
+  
+      if (qNew) {
+        products = await Product.find().sort({ createdAt: -1 }).limit(1);
+      } else if (qCategory) {
+        products = await Product.find({
+          category: {
+            $in: [qCategory],
+          },
+        });
+      } else {
+        products = await Product.find();
+      }
+  
+      res.status(200).json(products);
+    } catch (err) {
+      res.status(500).json(err);
     }
-}
-);
-
-//
-
-
-
-
-
-
-module.exports = router;
+  });
+  
+  module.exports = router;

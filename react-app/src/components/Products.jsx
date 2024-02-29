@@ -16,6 +16,7 @@ const Container = styled.div`
     `;
 
     const Products = ({ cat, filters, sort }) => {
+      console.log(cat, filters, sort);
       const [products, setProducts] = useState([]);
       const [filteredProducts, setFilteredProducts] = useState([]);
     
@@ -27,6 +28,7 @@ const Container = styled.div`
                 ? `http://localhost:5000/api/products?category=${cat}`
                 : "http://localhost:5000/api/products"
             );
+            console.log("Products:", res.data);
             setProducts(res.data);
           } catch (err) {
             console.log("Error fetching products",)
@@ -65,10 +67,10 @@ const Container = styled.div`
       return (
         <Container>
           {cat
-            ? filteredProducts.map((item) => <Product item={item} key={item.id} />)
+            ? filteredProducts.map((item) => <Product item={item} key={item._id} />)
             : products
                 .slice(0, 8)
-                .map((item) => <Product item={item} key={item.id} />)}
+                .map((item) => <Product item={item} key={item._id} />)}
         </Container>
       );
     };
