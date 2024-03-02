@@ -27,6 +27,7 @@ mongoose.connect(process.env.MONGO_URL)
 
 app.use(cors());
 app.use(express.json());
+app.use("/api/auth", authRoute)
 app.use("/api/users", userRoute);
 app.use("/api/products", productRoute);
 app.use("/api/carts", cartRoute);
