@@ -9,6 +9,8 @@ import { mobile } from '../responsive'
 import { useLocation } from 'react-router'
 import { useEffect, useState } from 'react'
 import {publicRequest} from "../requestmethods"
+import {addProduct} from "../redux/cartRedux"
+import {useDispatch} from "react-redux"
 
 
 
@@ -129,6 +131,7 @@ const Product = () => {
     const [quantity, setQuantity] = useState(1);
     const [color, setColor] = useState("");
     const [size, setSize] = useState("");
+    const dispatch = useDispatch()
 
     
 
@@ -152,9 +155,9 @@ const Product = () => {
     }
 
     const handleClick = () => {
-        // Add to cart
+        dispatch(addProduct({ ...product, quantity, color, size}))
         
-    }
+    };
 
 
     return(
@@ -163,7 +166,7 @@ const Product = () => {
             <Announcement/>
             <Wrapper>
                 <ImgContainer>
-                    <Image src= {product.img}/>
+                    <Image src= {product.imageUrl}/>
                 </ImgContainer>
                 <InfoContainer>
                     <Title>{product.title}</Title>
