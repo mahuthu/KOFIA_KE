@@ -1,8 +1,12 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express()
+const cors = require("cors");
+const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 dotenv.config();
+const { errorHandler } = require('./middlewares/errorHandler');
+
 //const userRoute = require('./routes/user');
 
 
@@ -12,7 +16,9 @@ const userRoute = require('./routes/user')
 const productRoute = require('./routes/product')
 const cartRoute = require('./routes/cart')
 const orderRoute = require('./routes/order')
-const cors = require("cors");
+const authentication = require('./routes/authentication');
+
+
 
 
 
@@ -27,11 +33,17 @@ mongoose.connect(process.env.MONGO_URL)
 
 app.use(cors());
 app.use(express.json());
-app.use("/api/auth", authRoute)
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute);
 app.use("/api/products", productRoute);
 app.use("/api/carts", cartRoute);
 app.use("/api/orders", orderRoute);
+app.use("/api/auth", authentication);
+app.use(errorHandler);
+
+
 
 
 

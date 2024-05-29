@@ -10,10 +10,17 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 
 const App = () => {
-  const user = true;
+  const user = useSelector(state => state.user.currentUser);
+  useEffect(() => {
+    console.log("Current user in App:", user); // Debugging log
+  }, [user]);
+
+
   return (
     <Router>
       <Routes>
@@ -21,6 +28,7 @@ const App = () => {
         <Route path="/products/:category" element={<ProductList />} />
         <Route path="/product/:id" element={<Product />} />
         <Route path="/cart" element={<Cart />} />
+        
         <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
         <Route path="/register" element={user ? <Navigate to="/" /> : <Register />} />
       </Routes>
