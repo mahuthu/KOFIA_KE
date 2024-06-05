@@ -9,7 +9,7 @@ const OrderSchema = new mongoose.Schema({
         }
     ], 
     amount: { type: Number, required: true },
-    shippingAddress: { type: Object, required: true },
+    shippingAddress: { type: Object, required: false },
     status: { type: String, required: true, default: 'Pending' },
 }, { timestamps: true });
 

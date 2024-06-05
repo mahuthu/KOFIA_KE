@@ -5,7 +5,8 @@ import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { mobile } from "../responsive";
 import { useSelector } from "react-redux";
-
+import axios from "axios";
+import { useNavigate } from "react-router-dom"; // Import useHistory hook
 
 const Container = styled.div``;
 
@@ -49,7 +50,6 @@ const Bottom = styled.div`
   display: flex;
   justify-content: space-between;
   ${mobile({ flexDirection: "column" })}
-
 `;
 
 const Info = styled.div`
@@ -157,6 +157,24 @@ const Button = styled.button`
 
 const Cart = () => {
   const cart = useSelector((state) => state.cart);
+  const history = useNavigate(); // Use useHistory hook
+
+  const handleCheckout = async () => {
+    const phone = "254726258462"; // Replace with the actual phone number
+    const amount = cart.total;
+
+    try {
+      const response = await axios.post("http://localhost:5000/api/authentication/stkpush", { phone, amount });
+      console.log("STK Push Response:", response.data);
+      alert("STK Push initiated. Check your phone for the prompt.");
+      // Navigate to success page with cart state
+      history.push("/success", { cart: cart });
+    } catch (error) {
+      console.error("STK Push Error:", error.message);
+      alert("Failed to initiate STK Push.");
+    }
+  };
+
   return (
     <Container>
       <Navbar />
@@ -169,38 +187,38 @@ const Cart = () => {
             <TopText>Shopping Bag(2)</TopText>
             <TopText>Your Wishlist (0)</TopText>
           </TopTexts>
-          <TopButton type="filled">CHECKOUT NOW</TopButton>
+          <TopButton type="filled" onClick={handleCheckout}>CHECKOUT NOW</TopButton>
         </Top>
         <Bottom>
           <Info>
             {cart.products.map((product) => (
-            <Product>
-              <ProductDetail>
-                <Image src={product.imageUrl} />
-                <Details>
-                  <ProductName>
-                    <b>Product:</b> {product.title}
-                  </ProductName>
-                  <ProductId>
-                    <b>ID:</b> {product._id}
-                  </ProductId>
-                  <ProductColor color={product.color} />
-                  <ProductSize>
-                    <b>Size:</b> {product.size}
-                  </ProductSize>
-                </Details>
-              </ProductDetail>
-              <PriceDetail>
-                <ProductAmountContainer>
-                  <Add />
-                  <ProductAmount>{product.quantity}</ProductAmount>
-                  <Remove />
-                </ProductAmountContainer>
-                <ProductPrice> $ {product.price* product.quantity}</ProductPrice>
-              </PriceDetail>
-            </Product> ))}
+              <Product key={product._id}>
+                <ProductDetail>
+                  <Image src={product.imageUrl} />
+                  <Details>
+                    <ProductName>
+                      <b>Product:</b> {product.title}
+                    </ProductName>
+                    <ProductId>
+                      <b>ID:</b> {product._id}
+                    </ProductId>
+                    <ProductColor color={product.color} />
+                    <ProductSize>
+                      <b>Size:</b> {product.size}
+                    </ProductSize>
+                  </Details>
+                </ProductDetail>
+                <PriceDetail>
+                  <ProductAmountContainer>
+                    <Add />
+                    <ProductAmount>{product.quantity}</ProductAmount>
+                    <Remove />
+                  </ProductAmountContainer>
+                  <ProductPrice>$ {product.price * product.quantity}</ProductPrice>
+                </PriceDetail>
+              </Product>
+            ))}
             <Hr />
-            
           </Info>
           <Summary>
             <SummaryTitle>ORDER SUMMARY</SummaryTitle>
@@ -220,7 +238,7 @@ const Cart = () => {
               <SummaryItemText>Total</SummaryItemText>
               <SummaryItemPrice>$ {cart.total}</SummaryItemPrice>
             </SummaryItem>
-            <Button>CHECKOUT NOW</Button>
+            <Button onClick={handleCheckout}>CHECKOUT NOW</Button>
           </Summary>
         </Bottom>
       </Wrapper>

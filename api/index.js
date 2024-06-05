@@ -6,6 +6,8 @@ const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 dotenv.config();
 const { errorHandler } = require('./middlewares/errorHandler');
+const authentication = require('./routes/authentication');
+
 
 //const userRoute = require('./routes/user');
 
@@ -40,7 +42,7 @@ app.use("/api/users", userRoute);
 app.use("/api/products", productRoute);
 app.use("/api/carts", cartRoute);
 app.use("/api/orders", orderRoute);
-app.use("/api/auth", authentication);
+app.use("/api/authentication", authentication);
 app.use(errorHandler);
 
 
