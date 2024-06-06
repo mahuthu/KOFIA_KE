@@ -157,18 +157,20 @@ const Button = styled.button`
 
 const Cart = () => {
   const cart = useSelector((state) => state.cart);
-  const history = useNavigate(); // Use useHistory hook
+  const history = useNavigate(); // 
 
   const handleCheckout = async () => {
     const phone = "254726258462"; // Replace with the actual phone number
-    const amount = cart.total;
+    const amount = 1;
 
     try {
       const response = await axios.post("http://localhost:5000/api/authentication/stkpush", { phone, amount });
       console.log("STK Push Response:", response.data);
       alert("STK Push initiated. Check your phone for the prompt.");
       // Navigate to success page with cart state
-      history.push("/success", { cart: cart });
+      console.log("Cart:", cart);
+      history(`/success`, { state: { cart: cart } });
+
     } catch (error) {
       console.error("STK Push Error:", error.message);
       alert("Failed to initiate STK Push.");
