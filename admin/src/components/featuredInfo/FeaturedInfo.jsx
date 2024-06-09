@@ -4,16 +4,25 @@ import { useEffect, useState } from "react";
 import { userRequest } from "../../requestMethods";
 
 export default function FeaturedInfo() {
-  const [income, setIncome] = useState([]);
+  const [income, setIncome] = useState(0);
   const [perc, setPerc] = useState(0);
 
   useEffect(() => {
     const getIncome = async () => {
       try {
         const res = await userRequest.get("orders/income");
-        setIncome(res.data);
-        setPerc((res.data[1].total * 100) / res.data[0].total - 100);
-      } catch {}
+        const incomeData = res.data;
+        // Assuming you get two months' data
+        if (incomeData.length > 1) {
+          setIncome(incomeData[1].total);
+          setPerc(((incomeData[1].total - incomeData[0].total) * 100) / incomeData[0].total);
+        } else if (incomeData.length === 1) {
+          setIncome(incomeData[0].total);
+          setPerc(0); // No comparison data available
+        }
+      } catch (error) {
+        console.error("Error fetching income:", error);
+      }
     };
     getIncome();
   }, []);
@@ -21,9 +30,9 @@ export default function FeaturedInfo() {
   return (
     <div className="featured">
       <div className="featuredItem">
-        <span className="featuredTitle">Revanue</span>
+        <span className="featuredTitle">Revenue</span>
         <div className="featuredMoneyContainer">
-          <span className="featuredMoney">${income[1]?.total}</span>
+          <span className="featuredMoney">${income}</span>
           <span className="featuredMoneyRate">
             %{Math.floor(perc)}{" "}
             {perc < 0 ? (
@@ -35,16 +44,7 @@ export default function FeaturedInfo() {
         </div>
         <span className="featuredSub">Compared to last month</span>
       </div>
-      <div className="featuredItem">
-        <span className="featuredTitle">Sales</span>
-        <div className="featuredMoneyContainer">
-          <span className="featuredMoney">$4,415</span>
-          <span className="featuredMoneyRate">
-            -1.4 <ArrowDownward className="featuredIcon negative" />
-          </span>
-        </div>
-        <span className="featuredSub">Compared to last month</span>
-      </div>
+    
       <div className="featuredItem">
         <span className="featuredTitle">Cost</span>
         <div className="featuredMoneyContainer">

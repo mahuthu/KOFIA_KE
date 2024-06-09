@@ -68,7 +68,7 @@ export default function Product() {
         </div>
         <div className="productTopRight">
           <div className="productInfoTop">
-            <img src={product.img} alt="" className="productInfoImg" />
+            <img src={product.imageUrl} alt="" className="productInfoImg" />
             <span className="productName">{product.title}</span>
           </div>
           <div className="productInfoBottom">
@@ -82,7 +82,7 @@ export default function Product() {
             </div>
             <div className="productInfoItem">
               <span className="productInfoKey">in stock:</span>
-              <span className="productInfoValue">{product.inStock}</span>
+              <span className="productInfoValue">{product.countInStock}</span>
             </div>
           </div>
         </div>
@@ -97,14 +97,14 @@ export default function Product() {
             <label>Price</label>
             <input type="text" placeholder={product.price} />
             <label>In Stock</label>
-            <select name="inStock" id="idStock">
+            <select name="countInStock" id="idStock">
               <option value="true">Yes</option>
               <option value="false">No</option>
             </select>
           </div>
           <div className="productFormRight">
             <div className="productUpload">
-              <img src={product.img} alt="" className="productUploadImg" />
+              <img src={product.imageUrl} alt="" className="productUploadImg" />
               <label for="file">
                 <Publish />
               </label>

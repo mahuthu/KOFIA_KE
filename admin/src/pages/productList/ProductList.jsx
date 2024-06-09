@@ -27,13 +27,13 @@ export default function ProductList() {
       renderCell: (params) => {
         return (
           <div className="productListItem">
-            <img className="productListImg" src={params.row.img} alt="" />
+            <img className="productListImg" src={params.row.imageUrl} alt="" />
             {params.row.title}
           </div>
         );
       },
     },
-    { field: "inStock", headerName: "Stock", width: 200 },
+    { field: "countInStock", headerName: "Stock", width: 200 },
     {
       field: "price",
       headerName: "Price",

@@ -69,7 +69,12 @@ router.get("/income", verifyTokenAndAdmin, async (req, res) => {
             { $match: { createdAt: { $gte: previousMonth } } }, //match the orders that are created after the previous month
             { $project: { month: { $month: "$createdAt" }, sales: "$amount" } }, //project the month and the sales. $month is a date operator. it returns the month of the date
             { $group: { _id: "$month", total: { $sum: "$sales" } } }, //group by month and sum the sales
+
+
         ]);
+
+        console.log("Income Data:", income); // Log the income data
+
         res.status(200).json(income);
     } catch(err){
         res.status(500).json(err);

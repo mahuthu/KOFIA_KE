@@ -17,14 +17,29 @@ import NewProduct from "./pages/newProduct/NewProduct";
 import Login from "./pages/login/Login";
 import { useSelector } from "react-redux";
 
-function App() {
-  const admin = useSelector((state) => state.user.currentUser?.isAdmin);
+const App = () => {
+  const persistRoot = localStorage.getItem("persist:root");
+  let admin = false;
+
+  if (persistRoot) {
+    try {
+      const userState = JSON.parse(persistRoot).user;
+      if (userState) {
+        const currentUser = JSON.parse(userState).currentUser;
+        if (currentUser) {
+          admin = currentUser.isAdmin;
+        }
+      }
+    } catch (error) {
+      console.error("Error parsing localStorage data:", error);
+    }
+  }
 
   return (
     <Router>
       <Switch>
         <Route path="/login" component={Login} />
-        {admin && (
+        {admin ? (
           <>
             <Topbar />
             <div className="container">
@@ -41,11 +56,12 @@ function App() {
               </Switch>
             </div>
           </>
+        ) : (
+          <Redirect to="/login" />
         )}
-        {!admin && <Redirect to="/login" />}
       </Switch>
     </Router>
   );
-}
+};
 
 export default App;

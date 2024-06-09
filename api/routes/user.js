@@ -70,27 +70,51 @@ router.get("/", verifyTokenAndAdmin, async (req, res) => {
 
 //Get user stats
 router.get("/stats", verifyTokenAndAdmin, async (req, res) => {
-    const date = new Date(); //current date
-    const lastYear = new Date(date.setFullYear(date.getFullYear() - 1));//last year same date
-    try{
-        const data = await User.aggregate([ //aggregate is a method in mongoose
-            {
-                $project: { //project is a method in aggregate
-                    month: {$month: "$createdAt"},//extract month from createdAt
-                },
-            },
-            {
-                $group: { //group is a method in aggregate
-                    _id: "$month",//group by month
-                    total: {$sum: 1},//count the number of users in each month
-                },
-            },
-        ]);
-        res.status(200).json(data);
-    } catch(err){
-        res.status(500).json(err);
+    const date = new Date();
+    const lastYear = new Date(date.setFullYear(date.getFullYear() - 1));
+  
+    try {
+      const data = await User.aggregate([
+        { $match: { createdAt: { $gte: lastYear } } },
+        {
+          $project: {
+            month: { $month: "$createdAt" },
+          },
+        },
+        {
+          $group: {
+            _id: "$month",
+            total: { $sum: 1 },
+          },
+        },
+      ]);
+      res.status(200).json(data)
+    } catch (err) {
+      res.status(500).json(err);
     }
-});
+  });
+// router.get("/stats", verifyTokenAndAdmin, async (req, res) => {
+//     const date = new Date(); //current date
+//     const lastYear = new Date(date.setFullYear(date.getFullYear() - 1));//last year same date
+//     try{
+//         const data = await User.aggregate([ //aggregate is a method in mongoose
+//             {
+//                 $project: { //project is a method in aggregate
+//                     month: {$month: "$createdAt"},//extract month from createdAt
+//                 },
+//             },
+//             {
+//                 $group: { //group is a method in aggregate
+//                     _id: "$month",//group by month
+//                     total: {$sum: 1},//count the number of users in each month
+//                 },
+//             },
+//         ]);
+//         res.status(200).json(data);
+//     } catch(err){
+//         res.status(500).json(err);
+//     }
+// });
 
 
 
