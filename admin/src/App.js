@@ -4,9 +4,10 @@ import "./App.css";
 import Home from "./pages/home/Home";
 import {
   BrowserRouter as Router,
-  Switch,
+  Routes,
   Route,
-  Redirect,
+  Navigate,
+  Outlet
 } from "react-router-dom";
 import UserList from "./pages/userList/UserList";
 import User from "./pages/user/User";
@@ -16,6 +17,16 @@ import Product from "./pages/product/Product";
 import NewProduct from "./pages/newProduct/NewProduct";
 import Login from "./pages/login/Login";
 import { useSelector } from "react-redux";
+
+const AdminLayout = () => (
+  <>
+    <Topbar />
+    <div className="container">
+      <Sidebar />
+      <Outlet />
+    </div>
+  </>
+);
 
 const App = () => {
   const persistRoot = localStorage.getItem("persist:root");
@@ -37,29 +48,23 @@ const App = () => {
 
   return (
     <Router>
-      <Switch>
-        <Route path="/login" component={Login} />
+      <Routes>
+        <Route path="/login" element={<Login />} />
         {admin ? (
-          <>
-            <Topbar />
-            <div className="container">
-              <Sidebar />
-              <Switch>
-                <Route exact path="/" component={Home} />
-                <Route path="/users" component={UserList} />
-                <Route path="/user/:userId" component={User} />
-                <Route path="/newUser" component={NewUser} />
-                <Route path="/products" component={ProductList} />
-                <Route path="/product/:productId" component={Product} />
-                <Route path="/newproduct" component={NewProduct} />
-                <Redirect from="*" to="/" />
-              </Switch>
-            </div>
-          </>
+          <Route element={<AdminLayout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/users" element={<UserList />} />
+            <Route path="/user/:userId" element={<User />} />
+            <Route path="/newUser" element={<NewUser />} />
+            <Route path="/products" element={<ProductList />} />
+            <Route path="/product/:productId" element={<Product />} />
+            <Route path="/newproduct" element={<NewProduct />} />
+            <Route path="*" element={<Navigate to="/" />} />
+          </Route>
         ) : (
-          <Redirect to="/login" />
+          <Route path="*" element={<Navigate to="/login" />} />
         )}
-      </Switch>
+      </Routes>
     </Router>
   );
 };

@@ -3,7 +3,6 @@
 import Chart from "../../components/chart/Chart";
 import FeaturedInfo from "../../components/featuredInfo/FeaturedInfo";
 import "./home.css";
-import { userData } from "../../dummyData";
 import WidgetSm from "../../components/widgetSm/WidgetSm";
 import WidgetLg from "../../components/widgetl.g/WidgetLg";
 import { useEffect, useMemo, useState } from "react";
@@ -44,6 +43,8 @@ export default function Home() {
     };
     getStats();
   }, [MONTHS]);
+
+  console.log(userStats)
 
   return (
     <div className="home">

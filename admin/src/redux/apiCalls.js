@@ -14,6 +14,21 @@ import {
   addProductStart,
   addProductSuccess,
 } from "./productRedux";
+import{
+  getUsersStart,
+  getUsersSuccess,
+  getUsersFailure,
+  deleteUsersFailure,
+  deleteUsersStart,
+  deleteUsersSuccess,
+  updateUsersFailure,
+  updateUsersStart,
+  updateUsersSuccess,
+  addUsersFailure,
+  addUsersStart,
+  addUsersSuccess
+
+} from "./clientRedux";
 
 export const login = async (dispatch, user) => {
   dispatch(loginStart());
@@ -41,7 +56,7 @@ export const getProducts = async (dispatch) => {
 export const deleteProduct = async (id, dispatch) => {
   dispatch(deleteProductStart());
   try {
-    // const res = await userRequest.delete(`/products/${id}`);
+    const res = await userRequest.delete(`/products/${id}`);
     dispatch(deleteProductSuccess(id));
   } catch (err) {
     dispatch(deleteProductFailure());
@@ -64,5 +79,47 @@ export const addProduct = async (product, dispatch) => {
     dispatch(addProductSuccess(res.data));
   } catch (err) {
     dispatch(addProductFailure());
+  }
+};
+
+export const getUsers = async (dispatch) => {
+  dispatch(getUsersStart());
+  try {
+    const res = await userRequest.get("/users");
+    console.log("Get Users Response:", res.data); // Log response data
+    dispatch(getUsersSuccess(res.data));
+  } catch (err) {
+    console.error("Get Users Error:", err.response ? err.response.data : err.message); // Log error details
+    dispatch(getUsersFailure());
+  }
+};
+
+
+export const deleteUsers = async (id, dispatch) => {
+  dispatch(deleteUsersStart());
+  try {
+    const res = await userRequest.delete(`/users/${id}`);
+    dispatch(deleteUsersSuccess(id));
+  } catch (err) {
+    dispatch(deleteUsersFailure());
+  }
+};
+
+export const updateUsers = async (id, user, dispatch) => {
+  dispatch(updateUsersStart());
+  try {
+    // update
+    dispatch(updateUsersSuccess({ id, user }));
+  } catch (err) {
+    dispatch(updateUsersFailure());
+  }
+};
+export const addUsers = async (user, dispatch) => {
+  dispatch(addUsersStart());
+  try {
+    const res = await userRequest.post(`/users`, user);
+    dispatch(addUsersSuccess(res.data));
+  } catch (err) {
+    dispatch(addUsersFailure());
   }
 };

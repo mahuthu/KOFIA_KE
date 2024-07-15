@@ -1,7 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import "./product.css";
 import Chart from "../../components/chart/Chart";
-import { productData } from "../../dummyData";
 import { Publish } from "@material-ui/icons";
 import { useSelector } from "react-redux";
 import { useEffect, useMemo, useState } from "react";
@@ -93,7 +92,7 @@ export default function Product() {
             <label>Product Name</label>
             <input type="text" placeholder={product.title} />
             <label>Product Description</label>
-            <input type="text" placeholder={product.desc} />
+            <input type="text" placeholder={product.description} />
             <label>Price</label>
             <input type="text" placeholder={product.price} />
             <label>In Stock</label>

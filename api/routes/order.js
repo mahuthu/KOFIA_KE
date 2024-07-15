@@ -60,13 +60,16 @@ router.get("/", verifyTokenAndAdmin, async (req, res) => {
 
 //get monthly income
 router.get("/income", verifyTokenAndAdmin, async (req, res) => {
+    const productId = req.query.pid; //get the product id from the query
     const date = new Date();
     const lastMonth = new Date(date.setMonth(date.getMonth() - 1)); //get the last month
     const previousMonth = new Date(new Date().setMonth(lastMonth.getMonth() - 1)); //get the previous month
 
     try{
         const income = await Order.aggregate([
-            { $match: { createdAt: { $gte: previousMonth } } }, //match the orders that are created after the previous month
+            { $match: { createdAt: { $gte: previousMonth }, ...(productId &&{
+                products:{$elemMatch: {productId}}
+            }) } }, //match the orders that are created after the previous month
             { $project: { month: { $month: "$createdAt" }, sales: "$amount" } }, //project the month and the sales. $month is a date operator. it returns the month of the date
             { $group: { _id: "$month", total: { $sum: "$sales" } } }, //group by month and sum the sales
 

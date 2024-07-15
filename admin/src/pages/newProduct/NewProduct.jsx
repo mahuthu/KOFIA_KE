@@ -25,6 +25,8 @@ export default function NewProduct() {
     setCat(e.target.value.split(","));
   };
 
+  console.log(inputs)
+
   const handleClick = (e) => {
     e.preventDefault();
     const fileName = new Date().getTime() + file.name;
@@ -61,7 +63,7 @@ export default function NewProduct() {
         // Handle successful uploads on complete
         // For instance, get the download URL: https://firebasestorage.googleapis.com/...
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          const product = { ...inputs, img: downloadURL, categories: cat };
+          const product = { ...inputs, imageUrl:downloadURL, categories: cat };
           addProduct(product, dispatch);
         });
       }
@@ -85,14 +87,14 @@ export default function NewProduct() {
           <input
             name="title"
             type="text"
-            placeholder="Apple Airpods"
+            placeholder="Detroit"
             onChange={handleChange}
           />
         </div>
         <div className="addProductItem">
           <label>Description</label>
           <input
-            name="desc"
+            name="description"
             type="text"
             placeholder="description..."
             onChange={handleChange}
@@ -109,11 +111,11 @@ export default function NewProduct() {
         </div>
         <div className="addProductItem">
           <label>Categories</label>
-          <input type="text" placeholder="jeans,skirts" onChange={handleCat} />
+          <input type="text" placeholder="fitted, adjustable, bucket" onChange={handleCat} />
         </div>
         <div className="addProductItem">
           <label>Stock</label>
-          <select name="inStock" onChange={handleChange}>
+          <select name="countInStock" onChange={handleChange}>
             <option value="true">Yes</option>
             <option value="false">No</option>
           </select>

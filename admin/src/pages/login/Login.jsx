@@ -1,25 +1,29 @@
-import { useState } from "react";
+import { useState, useEffect } from "react"; // Import useEffect
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { login } from "../../redux/apiCalls";
+import { clearError } from "../../redux/userRedux"; // Import clearError from your userSlice
+
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
-  const history = useHistory();
+  const navigate = useNavigate(); // Correct hook
   const { isFetching, error } = useSelector((state) => state.user);
 
+  useEffect(() => {
+    dispatch(clearError()); // Clear the error when the component mounts
+  }, [dispatch]);
 
 
-  const handleClick = (e) => {
+  const handleClick = async (e) => {
     e.preventDefault();
-    login(dispatch, { username, password }).then(() => {
-      const currentUser = JSON.parse(localStorage.getItem("persist:root"))?.user?.currentUser;
-      if (currentUser) {
-        history.push('/'); // Redirect to the homepage after successful login
-      }
-    });
+    await login(dispatch, { username, password });
+    const currentUser = JSON.parse(localStorage.getItem("persist:root"))?.user;
+    if (currentUser && JSON.parse(currentUser).currentUser) {
+      navigate("/");
+    }
   };
 
   return (
@@ -44,11 +48,10 @@ const Login = () => {
         placeholder="password"
         onChange={(e) => setPassword(e.target.value)}
       />
-      <button onClick={handleClick} disabled={isFetching} style={{ padding: 10, width:100 }}>
+      <button onClick={handleClick} disabled={isFetching} style={{ padding: 10, width: 100 }}>
         Login
       </button>
-      {error && <span>Something went wrong</span>}
-
+      {error && <span style={{ color: "red", marginTop: 10 }}>Something went wrong!</span>}
     </div>
   );
 };
