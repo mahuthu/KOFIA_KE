@@ -163,6 +163,8 @@ const Cart = () => {
     const phone = "254726258462"; // Replace with the actual phone number
     const amount = 1;
 
+    
+
     try {
       const response = await axios.post("http://localhost:5000/api/authentication/stkpush", { phone, amount });
       console.log("STK Push Response:", response.data);
@@ -177,6 +179,12 @@ const Cart = () => {
     }
   };
 
+
+  const handleContinueShopping = () => {
+    history('/'); // Navigate to home page
+  };
+
+
   return (
     <Container>
       <Navbar />
@@ -184,8 +192,8 @@ const Cart = () => {
       <Wrapper>
         <Title>YOUR BAG</Title>
         <Top>
-          <TopButton>CONTINUE SHOPPING</TopButton>
-          <TopTexts>
+        <TopButton onClick={handleContinueShopping}>CONTINUE SHOPPING</TopButton>
+        <TopTexts>
             <TopText>Shopping Bag(2)</TopText>
             <TopText>Your Wishlist (0)</TopText>
           </TopTexts>

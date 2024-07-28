@@ -1,5 +1,4 @@
-import {createSlice} from "@reduxjs/toolkit";
-
+import { createSlice } from "@reduxjs/toolkit";
 
 const userSlice = createSlice({
     name: "user",
@@ -7,6 +6,7 @@ const userSlice = createSlice({
         currentUser: null,
         isFetching: false,
         error: false,
+        isAuthenticated: false, // Add this property
     },
 
     reducers: {
@@ -15,18 +15,21 @@ const userSlice = createSlice({
         },
         loginSuccess: (state, action) => {
             state.isFetching = false;
-            state.currentUser = action.payload
+            state.currentUser = action.payload;
+            state.isAuthenticated = true; // Set to true on successful login
         },
         loginFailure: (state) => {
             state.isFetching = false;
             state.error = true;
+            state.isAuthenticated = false; // Ensure this is set to false on failure
         },
         logout: (state) => {
             state.currentUser = null;
+            state.isAuthenticated = false; // Set to false on logout
+            localStorage.removeItem("persist:root");
         },
     },
+});
 
-}); 
-
-export const {loginStart, loginSuccess, loginFailure, logout} = userSlice.actions;
+export const { loginStart, loginSuccess, loginFailure, logout } = userSlice.actions;
 export default userSlice.reducer;

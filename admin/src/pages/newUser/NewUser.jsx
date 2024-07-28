@@ -1,6 +1,33 @@
 import "./newuser.css";
+import { useState } from "react";
+
+import { addUsers } from "../../redux/apiCalls";
+import { useDispatch } from "react-redux";
+
+
 
 export default function NewUser() {
+const [inputs, setInputs] = useState({});
+const dispatch = useDispatch();
+
+const handleChange = (e) => {
+setInputs((prev) => {
+return { ...prev, [e.target.name]: e.target.value };
+}
+);
+};
+
+const handleClick = (e) => {
+e.preventDefault();
+addUsers(inputs, dispatch);
+}
+
+
+console.log(inputs)
+
+
+
+
   return (
     <div className="newUser">
       <h1 className="newUserTitle">New User</h1>

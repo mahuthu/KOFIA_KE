@@ -1,11 +1,14 @@
+// success.js
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { userRequest } from "../requestmethods";
+import { clearCart } from '../redux/cartRedux'; // Import the clearCart action
 
 const Success = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch(); // Add dispatch
   const [orderId, setOrderId] = useState(null);
   const user = useSelector(state => state.user.currentUser);
   const cart = location.state?.cart;
@@ -31,6 +34,9 @@ const Success = () => {
 
         const res = await userRequest.post("/orders", order);
         setOrderId(res.data._id);
+
+        // Clear the cart state
+        dispatch(clearCart()); // Dispatch clearCart action
       } catch (err) {
         console.error("Error creating order:", err);
       }
@@ -39,7 +45,7 @@ const Success = () => {
     if (cart && user) {
       createOrder();
     }
-  }, [cart, user]);
+  }, [cart, user, dispatch]);
 
   return (
     <div

@@ -46,7 +46,7 @@ router.post('/login', async (req, res) => {
                 isAdmin: user.isAdmin,
             },
             process.env.JWT_SEC,
-            { expiresIn: "3d" }
+            { expiresIn: "1d" }
         );
 
         const { password, ...others } = user._doc;
@@ -56,5 +56,39 @@ router.post('/login', async (req, res) => {
         return res.status(500).json(err);
     }
 });
+
+// REFRESH TOKEN
+router.post('/refresh', async (req, res) => {
+    const refreshToken = req.body.refreshToken;
+    if (!refreshToken) return res.status(401).json("No refresh token provided");
+
+    jwt.verify(refreshToken, process.env.JWT_SEC, (err, user) => {
+        if (err) return res.status(403).json("Invalid refresh token");
+
+        const newAccessToken = jwt.sign(
+            {
+                id: user.id,
+                isAdmin: user.isAdmin,
+            },
+            process.env.JWT_SEC,
+            { expiresIn: "15m" } // Access token expiration
+        );
+
+        res.status(200).json({ accessToken: newAccessToken });
+    });
+});
+router.post('/logout', async (req, res) => {
+    const { refreshToken } = req.body;
+    if (!refreshToken) return res.status(401).json("No refresh token provided");
+  
+    try {
+      // Add the refresh token to blacklist
+      await TokenBlacklist.add(refreshToken); // Example of adding to a blacklist
+      res.status(200).json("Logged out successfully");
+    } catch (err) {
+      console.error("Error during logout:", err);
+      res.status(500).json("Internal server error");
+    }
+  });
 
 module.exports = router;

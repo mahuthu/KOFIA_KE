@@ -63,9 +63,26 @@ const refreshToken = (req, res) => {
   });
 };
 
+const logout = async (req, res) => {
+  const { refreshToken } = req.body;
+  if (!refreshToken) {
+    return res.status(401).json("No refresh token provided");
+  }
+
+  // Invalidate the refresh token
+  try {
+    await TokenBlacklist.add(refreshToken); // Example of adding to a blacklist
+    res.status(200).json("Logged out successfully");
+  } catch (err) {
+    console.error("Error during logout:", err);
+    res.status(500).json("Internal server error");
+  }
+};
+
 module.exports = {
   verifyToken,
   verifyTokenAndAuthorization,
   verifyTokenAndAdmin,
   refreshToken,
+  logout,
 };
