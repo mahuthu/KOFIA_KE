@@ -3,10 +3,10 @@ import { createSlice } from "@reduxjs/toolkit";
 const userSlice = createSlice({
     name: "user",
     initialState: {
-        currentUser: null,
+        currentUser: JSON.parse(localStorage.getItem("user")) || null,
         isFetching: false,
         error: false,
-        isAuthenticated: false, // Add this property
+        isAuthenticated: !!localStorage.getItem("user"),
     },
 
     reducers: {
@@ -17,6 +17,8 @@ const userSlice = createSlice({
             state.isFetching = false;
             state.currentUser = action.payload;
             state.isAuthenticated = true; // Set to true on successful login
+            localStorage.setItem("user", JSON.stringify(action.payload)); // Save user to local storage
+
         },
         loginFailure: (state) => {
             state.isFetching = false;
