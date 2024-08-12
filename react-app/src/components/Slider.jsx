@@ -1,16 +1,17 @@
 import { ArrowLeftOutlined, ArrowRightOutlined } from "@material-ui/icons";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { sliderItems } from "../data";
-import { mobile } from "../responsive";
+import { mobile, showSingleImageOnSmallScreens, hideSingleImageOnLargeScreens, responsiveImageStyles } from "../responsive";
 
+// Styled components
 const Container = styled.div`
   width: 100%;
   height: 100vh;
   display: flex;
   position: relative;
   overflow: hidden;
-  ${mobile({ display: "none" })}
+  ${mobile({ display: "none" })} // Hide slider on small screens
 `;
 
 const Arrow = styled.div`
@@ -54,6 +55,7 @@ const ImgContainer = styled.div`
 
 const Image = styled.img`
   height: 80%;
+  ${responsiveImageStyles} // Apply responsive styles
 `;
 
 const InfoContainer = styled.div`
@@ -79,39 +81,66 @@ const Button = styled.button`
   cursor: pointer;
 `;
 
+const SingleImageContainer = styled.div`
+  width: 100%;
+  height: 100vh;
+  display: none; // Default to hidden
+  align-items: center;
+  justify-content: center;
+  background-color: #${(props) => props.bg};
+  ${showSingleImageOnSmallScreens} // Show on small screens
+  ${hideSingleImageOnLargeScreens} // Hide on large screens
+`;
+
 const Slider = () => {
   const [slideIndex, setSlideIndex] = useState(0);
+
   const handleClick = (direction) => {
     if (direction === "left") {
-      setSlideIndex(slideIndex > 0 ? slideIndex - 1 : 2);
+      setSlideIndex(slideIndex > 0 ? slideIndex - 1 : sliderItems.length - 1);
     } else {
-      setSlideIndex(slideIndex < 2 ? slideIndex + 1 : 0);
+      setSlideIndex(slideIndex < sliderItems.length - 1 ? slideIndex + 1 : 0);
     }
   };
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSlideIndex(prevIndex =>
+        prevIndex < sliderItems.length - 1 ? prevIndex + 1 : 0
+      );
+    }, 5000); // Change slide every 5 seconds
+
+    return () => clearInterval(interval); // Clean up interval on component unmount
+  }, []);
+
   return (
-    <Container>
-      <Arrow direction="left" onClick={() => handleClick("left")}>
-        <ArrowLeftOutlined />
-      </Arrow>
-      <Wrapper slideIndex={slideIndex}>
-        {sliderItems.map((item) => (
-          <Slide bg={item.bg} key={item.id}>
-            <ImgContainer>
-              <Image src={item.img} />
-            </ImgContainer>
-            <InfoContainer>
-              <Title>{item.title}</Title>
-              <Desc>{item.desc}</Desc>
-              <Button>SHOW NOW</Button>
-            </InfoContainer>
-          </Slide>
-        ))}
-      </Wrapper>
-      <Arrow direction="right" onClick={() => handleClick("right")}>
-        <ArrowRightOutlined />
-      </Arrow>
-    </Container>
+    <>
+      <Container>
+        <Arrow direction="left" onClick={() => handleClick("left")}>
+          <ArrowLeftOutlined />
+        </Arrow>
+        <Wrapper slideIndex={slideIndex}>
+          {sliderItems.map((item) => (
+            <Slide bg={item.bg} key={item.id}>
+              <ImgContainer>
+                <Image src={item.img} />
+              </ImgContainer>
+              <InfoContainer>
+                <Title>{item.title}</Title>
+                <Desc>{item.desc}</Desc>
+                <Button>SHOW NOW</Button>
+              </InfoContainer>
+            </Slide>
+          ))}
+        </Wrapper>
+        <Arrow direction="right" onClick={() => handleClick("right")}>
+          <ArrowRightOutlined />
+        </Arrow>
+      </Container>
+      <SingleImageContainer bg={sliderItems[1].bg}>
+        <Image src={sliderItems[1].img} alt={sliderItems[1].title} />
+      </SingleImageContainer>
+    </>
   );
 };
 

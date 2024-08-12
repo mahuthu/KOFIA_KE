@@ -1,21 +1,25 @@
-import  {styled} from "styled-components";
+import { styled } from "styled-components";
 import { mobile } from "../responsive";
 import { Link } from "react-router-dom";
 
 const Container = styled.div`
   flex: 1;
   margin: 3px;
-  height: 70vh;
   position: relative;
   background-color: #f5fbfd;
+  overflow: hidden; // Prevent overflow
+  ${mobile({
+    height: "auto", // Allow container height to adjust based on content
+  })}
 `;
 
 const Image = styled.img`
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  ${mobile({ height: "20vh" })}
-
+  height: auto; // Ensure height adjusts to maintain aspect ratio
+  ${mobile({
+    maxHeight: "100%", // Prevent the image from exceeding container height
+    objectFit: "cover", // Cover the container while preserving aspect ratio
+  })}
 `;
 
 const Info = styled.div`
@@ -28,34 +32,38 @@ const Info = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  color: #fcf1ed;
+  text-align: center; // Center text horizontally
+  padding: 10px; // Add padding to avoid text being too close to edges
+  box-sizing: border-box; // Ensure padding does not overflow container
 `;
 
 const Title = styled.h1`
-    color: #fcf1ed;
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 `;
 
 const Button = styled.button`
-    border:none;
-    padding: 10px;
-    background-color: white;
-    color:teal;
-    cursor: pointer;
-    font-weight: 600;
-`; 
+  border: none;
+  padding: 10px;
+  background-color: white;
+  color: teal;
+  cursor: pointer;
+  font-weight: 600;
+  border-radius: 5px; // Rounded corners for better appearance
+`;
 
 const CategoryItem = ({ item }) => {
-    return (
-      <Container>
-        <Link to={`/products/${item.cat}`}>
-        <Image src={item.img} />
+  return (
+    <Container>
+      <Link to={`/products/${item.cat}`}>
+        <Image src={item.img} alt={item.title} />
         <Info>
           <Title>{item.title}</Title>
           <Button>SHOP NOW</Button>
         </Info>
-        </Link>
-      </Container>
-    );
-  };
-    
+      </Link>
+    </Container>
+  );
+};
+
 export default CategoryItem;
