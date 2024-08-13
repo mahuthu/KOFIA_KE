@@ -157,11 +157,15 @@ const Button = styled.button`
 
 const Cart = () => {
   const cart = useSelector((state) => state.cart);
+  const currentUser = useSelector((state) => state.user.currentUser);
+  console.log(currentUser)
+
   const history = useNavigate(); // 
 
   const handleCheckout = async () => {
-    const phone = "254726258462"; // Replace with the actual phone number
-    const amount = 1;
+    const amount = 1 // total Replace with the actual total amount
+    const localPhoneNumber = currentUser?.phoneNumber;
+    const phone = `254${localPhoneNumber.slice(1)}`; // Remove the leading '0' and add country code
 
     
 

@@ -11,7 +11,9 @@ import { publicRequest } from "../requestmethods";
 import { addProduct } from "../redux/cartRedux";
 import { useDispatch, useSelector } from "react-redux";
 
-const Container = styled.div``;
+const Container = styled.div`
+  background-color: #f5fbfd;
+`;
 
 const Wrapper = styled.div` 
     padding: 50px;
@@ -172,8 +174,9 @@ const Product = () => {
                 </ImgContainer>
                 <InfoContainer>
                     <Title>{product.title}</Title>
-                    <Desc>{product.desc}</Desc>
+                    <Desc>{product.description}</Desc>
                     <Price>{product.price}</Price>
+                    <countInStock>{product.countInStock}</countInStock>
                     <FilterContainer>
                         <Filter>
                             <FilterTitle>Color</FilterTitle>

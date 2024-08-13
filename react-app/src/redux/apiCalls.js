@@ -19,3 +19,19 @@ export const login = async(dispatch, user) => {
 
     
 }
+
+export const register = async(dispatch, user) => {
+    dispatch(loginStart());
+    try {
+        const res = await publicRequest.post("/auth/register", user);
+        console.log("API response:", res.data); // Debugging log
+
+        dispatch(loginSuccess(res.data));
+    } catch (err) {
+        console.error("API error:", err); // Debugging log
+
+        dispatch(loginFailure());
+    }   
+
+    
+}

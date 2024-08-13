@@ -26,7 +26,7 @@ router.post("/payment", async (req, res) => { //create a post request to the pay
             order.save(); //save the order to the database
             res.status(200).json(stripeRes); //send the stripe response
         }
-    }
+    });
 });
 
 modules.export = router; //export the router

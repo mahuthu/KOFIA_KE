@@ -1,28 +1,45 @@
 const router = require('express').Router();
 const User = require("../models/User");
 const CryptoJS = require("crypto-js");
+const { request } = require('express');
 const jwt = require("jsonwebtoken");
 
 // REGISTER
 router.post("/register", async (req, res) => {
-    if (req.body.username === "" || req.body.email === "" || req.body.password === "") {
+    const {firstName, lastName, username, email, password, phoneNumber } = req.body;
+
+    // Validate input
+    if ( !firstName || !lastName || !username || !email || !password || !phoneNumber) {
         return res.status(400).json("Please fill in all fields");
-    } else if (req.body.password.length < 6) {
+    }
+    if (password.length < 6) {
         return res.status(400).json("Password must be at least 6 characters long");
-    } else {
-        const newUser = new User({
-            username: req.body.username,
-            email: req.body.email,
-            password: CryptoJS.AES.encrypt(req.body.password, process.env.PASS_SEC).toString(),
-        });
-        try {
-            const user = await newUser.save();
-            return res.status(200).json(user);
-        } catch (err) {
-            return res.status(500).json(err);
-        }
+    }
+    if (!/^\d{10}$/.test(phoneNumber)) {
+        return res.status(400).json("Invalid phone number. It must be a 10-digit number.");
+    }
+
+    // Create new user
+    const newUser = new User({
+        username,
+        email,
+        password: CryptoJS.AES.encrypt(password, process.env.PASS_SEC).toString(),
+        phoneNumber,
+        firstName,
+        lastName
+    });
+
+    try {
+        console.log("Request Body:", req.body);
+        const user = await newUser.save();
+        console.log("User Saved:", user);
+        return res.status(200).json(user);
+    } catch (err) {
+        console.error("Error during registration:", err);
+        return res.status(500).json(err);
     }
 });
+
 
 // LOGIN
 router.post('/login', async (req, res) => {
