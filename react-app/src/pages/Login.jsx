@@ -15,21 +15,27 @@ const Container = styled.div`
     url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxFhakrAVnq1QmaYU6nyyOxejOy0N7unAeCA&usqp=CAU")
       center;
   background-size: cover;
+  background-position: center;
   display: flex;
   align-items: center;
   justify-content: center;
+  ${mobile({ backgroundPosition: 'top center' })}
 `;
 
 const Wrapper = styled.div`
   width: 25%;
   padding: 20px;
   background-color: white;
-  ${mobile({ width: "75%" })}
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  ${mobile({ width: "90%", padding: "15px" })}
 `;
 
 const Title = styled.h1`
   font-size: 24px;
   font-weight: 300;
+  text-align: center;
+  ${mobile({ fontSize: "20px" })}
 `;
 
 const Form = styled.form`
@@ -39,19 +45,23 @@ const Form = styled.form`
 
 const Input = styled.input`
   flex: 1;
-  min-width: 40%;
+  min-width: 100%;
   margin: 10px 0;
   padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
 `;
 
 const Button = styled.button`
-  width: 40%;
+  width: 100%;
   border: none;
-  padding: 15px 20px;
+  padding: 15px;
   background-color: teal;
   color: white;
   cursor: pointer;
-  margin-bottom: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  font-size: 16px;
   &:disabled {
     color: green;
     cursor: not-allowed;
@@ -59,14 +69,20 @@ const Button = styled.button`
 `;
 
 const StyledLink = styled(RouterLink)`
-  margin: 5px 0px;
-  font-size: 12px;
+  margin: 5px 0;
+  font-size: 14px;
   text-decoration: underline;
-  cursor: pointer;
+  color: teal;
+  text-align: center;
+  display: block;
+  ${mobile({ fontSize: "12px" })}
 `;
 
 const Error = styled.span`
   color: red;
+  text-align: center;
+  display: block;
+  margin-top: 10px;
 `;
 
 const Login = () => {
@@ -85,12 +101,12 @@ const Login = () => {
       <Wrapper>
         <Title>SIGN IN</Title>
         <Form>
-          <Input placeholder="username" onChange={(e) => setUsername(e.target.value)} />
-          <Input placeholder="password" type="password" onChange={(e) => setPassword(e.target.value)} />
+          <Input placeholder="Username" onChange={(e) => setUsername(e.target.value)} />
+          <Input placeholder="Password" type="password" onChange={(e) => setPassword(e.target.value)} />
           <Button onClick={handleClick} disabled={isFetching}>LOGIN</Button>
           {error && <Error>Something went wrong</Error>}
-          <StyledLink to="#">DO NOT YOU REMEMBER THE PASSWORD?</StyledLink>
-          <StyledLink to="/register">CREATE A NEW ACCOUNT</StyledLink> {/* Updated link */}
+          <StyledLink to="#">DO YOU REMEMBER THE PASSWORD?</StyledLink>
+          <StyledLink to="/register">CREATE A NEW ACCOUNT</StyledLink>
         </Form>
       </Wrapper>
     </Container>

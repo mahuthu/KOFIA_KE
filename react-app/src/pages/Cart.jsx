@@ -7,6 +7,8 @@ import { mobile } from "../responsive";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { useNavigate } from "react-router-dom"; // Import useHistory hook
+import { Link } from 'react-router-dom';
+
 
 const Container = styled.div``;
 
@@ -157,6 +159,8 @@ const Button = styled.button`
 
 const Cart = () => {
   const cart = useSelector((state) => state.cart);
+  const wishlist = useSelector((state) => state.wishlist); // Add this line
+
   const currentUser = useSelector((state) => state.user.currentUser);
   console.log(currentUser)
 
@@ -198,9 +202,13 @@ const Cart = () => {
         <Top>
         <TopButton onClick={handleContinueShopping}>CONTINUE SHOPPING</TopButton>
         <TopTexts>
-            <TopText>Shopping Bag(2)</TopText>
-            <TopText>Your Wishlist (0)</TopText>
-          </TopTexts>
+          <Link to="/cart" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <TopText>Shopping Bag({cart.quantity})</TopText>
+          </Link>
+          <Link to="/wishlist" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <TopText>Your Wishlist({wishlist.items.length})</TopText>
+          </Link>
+        </TopTexts>
           <TopButton type="filled" onClick={handleCheckout}>CHECKOUT NOW</TopButton>
         </Top>
         <Bottom>

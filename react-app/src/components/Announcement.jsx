@@ -18,7 +18,7 @@ const Container = styled.div`
 const Announcement = () => {
   return (
     <Container>
-        Super Deal! Free Shipping on Orders Over $200
+        Free delivery for orders in and around Nairobi
     </Container>
   )
 }

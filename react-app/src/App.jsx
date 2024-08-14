@@ -6,6 +6,10 @@ import Register from "./pages/Register";
 import Cart from './pages/Cart';
 import Success from './pages/Success';
 import PrivateRoute from "./components/PrivateRoute";
+import UserProfile from "./pages/UserProfile";
+import Wishlist from './pages/WishList';
+
+
 
 import {
   BrowserRouter as Router,
@@ -30,6 +34,8 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/products/:category" element={<ProductList />} />
         <Route path="/product/:id" element={<Product />} />
+        <Route path="/profile" element={<UserProfile />} />
+        <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/cart" element={<PrivateRoute element={Cart} />} />
         <Route path="/success" element={<Success />} />
         <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />

@@ -121,7 +121,6 @@ const Footer = () => {
             <Pinterest />
           </SocialIcon>
         </SocialContainer>
-        <Desc>Designed by Mahuthu</Desc>
       </Left>
       
       <Center>
@@ -151,6 +150,8 @@ const Footer = () => {
           <MailOutline style={{ marginRight: "10px" }} /> KOFIA_KE.co.ke
         </ContactItem>
         <Payment src="https://i.ibb.co/Qfvn4z6/payment.png" />
+        <Desc>Designed by savannahinc</Desc>
+
       </Right>
     </Container>
   );

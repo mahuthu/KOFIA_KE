@@ -6,7 +6,7 @@ const userSlice = createSlice({
         currentUser: JSON.parse(localStorage.getItem("user")) || null,
         isFetching: false,
         error: false,
-    isAuthenticated: !!localStorage.getItem("user"),
+        isAuthenticated: !!localStorage.getItem("user"),
     },
 
     reducers: {
@@ -16,23 +16,41 @@ const userSlice = createSlice({
         loginSuccess: (state, action) => {
             state.isFetching = false;
             state.currentUser = action.payload;
-            state.isAuthenticated = true; // Set to true on successful login
-            localStorage.setItem("user", JSON.stringify(action.payload)); // Save user to local storage
-
+            state.isAuthenticated = true;
+            localStorage.setItem("user", JSON.stringify(action.payload));
         },
         loginFailure: (state) => {
             state.isFetching = false;
             state.error = true;
-            state.isAuthenticated = false; // Ensure this is set to false on failure
+            state.isAuthenticated = false;
         },
         logout: (state) => {
             state.currentUser = null;
-            state.isAuthenticated = false; // Set to false on logout
-            localStorage.removeItem("persist:root", "user");
-        
+            state.isAuthenticated = false;
+            // localStorage.removeItem("persist:root");
+        },
+        updateUserStart: (state) => {
+            state.isFetching = true;
+        },
+        updateUserSuccess: (state, action) => {
+            state.isFetching = false;
+            state.currentUser = action.payload;
+            localStorage.setItem("user", JSON.stringify(action.payload));
+        },
+        updateUserFailure: (state) => {
+            state.isFetching = false;
+            state.error = true;
         },
     },
 });
 
-export const { loginStart, loginSuccess, loginFailure, logout } = userSlice.actions;
+export const { 
+    loginStart, 
+    loginSuccess, 
+    loginFailure, 
+    logout,
+    updateUserStart,
+    updateUserSuccess,
+    updateUserFailure 
+} = userSlice.actions;
 export default userSlice.reducer;

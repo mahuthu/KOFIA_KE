@@ -1,10 +1,10 @@
-
-import React from 'react'
+import React from 'react';
 import { FavoriteBorderOutlined, SearchOutlined, ShoppingCartOutlined } from '@material-ui/icons';
 import styled from 'styled-components';
-import {Link} from "react-router-dom";
-
-
+import { Link } from 'react-router-dom';
+import { addProduct } from '../redux/cartRedux';
+import { addToWishlist, removeFromWishlist } from '../redux/wishListRedux';
+import { useSelector, useDispatch } from 'react-redux';
 
 const Info = styled.div`
   opacity: 0;
@@ -55,35 +55,53 @@ const Icon = styled.div`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: white;
+  background-color: ${(props) => (props.isWishlisted ? '#ff0000' : 'white')};  // Red if wishlist
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 10px;
   transition: all 0.5s ease;
   &:hover {
-    background-color: #e9f5f5;
+    background-color: ${(props) => (props.isWishlisted ? '#ff9999' : '#e9f5f5')};
     transform: scale(1.1);
   }
 `;
 
-
-
 const Product = ({ item }) => {
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+  const wishlist = useSelector((state) => state.wishlist.items);
+  
+  const isWishlisted = wishlist.some((wishItem) => wishItem._id === item._id);
+
+  const handleAddToCart = () => {
+    dispatch(addProduct({ ...item, quantity: 1 }));
+  };
+
+  const handleToggleWishlist = () => {
+    if (isWishlisted) {
+      dispatch(removeFromWishlist(item));
+    } else {
+      dispatch(addToWishlist(item));
+    }
+  };
+
   return (
     <Container>
       <Circle />
       <Image src={item.imageUrl} />
       <Info>
-        <Icon>
-          <ShoppingCartOutlined />
-        </Icon>
+        {isAuthenticated && (
+          <Icon onClick={handleAddToCart}>
+            <ShoppingCartOutlined />
+          </Icon>
+        )}
         <Icon>
           <Link to={`/product/${item._id}`}>
-          <SearchOutlined />
+            <SearchOutlined />
           </Link>
         </Icon>
-        <Icon>
+        <Icon onClick={handleToggleWishlist} isWishlisted={isWishlisted}>
           <FavoriteBorderOutlined />
         </Icon>
       </Info>
@@ -91,5 +109,4 @@ const Product = ({ item }) => {
   );
 };
 
-
-export default Product
+export default Product;

@@ -21,6 +21,8 @@ router.put("/:id", verifyTokenAndAuthorization, async (req, res) => {
             {new: true}
 
         );
+        const { password, ...others } = updatedUser._doc;
+
         res.status(200).json(updatedUser);
         }
         catch(err){
