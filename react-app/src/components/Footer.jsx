@@ -15,6 +15,8 @@ import { mobile } from "../responsive";
 const Container = styled.div`
   display: flex;
   flex-wrap: wrap; // Ensure items wrap properly
+  background-color: teal;
+  
   ${mobile({ flexDirection: "column", padding: "20px" })} // Stack vertically and add padding on small screens
 `;
 

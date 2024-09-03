@@ -56,9 +56,10 @@ export const getProducts = async (dispatch) => {
 export const deleteProduct = async (id, dispatch) => {
   dispatch(deleteProductStart());
   try {
-    const res = await userRequest.delete(`/products/${id}`);
-    dispatch(deleteProductSuccess(id));
+    await userRequest.delete(`/products/${id}`);  // No res assignment
+    dispatch(deleteProductSuccess(id));  // Proceed if delete was successful
   } catch (err) {
+    console.error("Delete Product Error:", err.response ? err.response.data : err.message);
     dispatch(deleteProductFailure());
   }
 };
@@ -98,12 +99,14 @@ export const getUsers = async (dispatch) => {
 export const deleteUsers = async (id, dispatch) => {
   dispatch(deleteUsersStart());
   try {
-    const res = await userRequest.delete(`/users/${id}`);
-    dispatch(deleteUsersSuccess(id));
+    await userRequest.delete(`/users/${id}`);  // No res assignment
+    dispatch(deleteUsersSuccess(id));  // Proceed if delete was successful
   } catch (err) {
+    console.error("Delete User Error:", err.response ? err.response.data : err.message);
     dispatch(deleteUsersFailure());
   }
 };
+
 
 export const updateUsers = async (id, user, dispatch) => {
   dispatch(updateUsersStart());

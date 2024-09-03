@@ -1,6 +1,6 @@
 import {
     CalendarToday,
-    LocationSearching,
+    // LocationSearching,
     MailOutline,
     PermIdentity,
     PhoneAndroid,
@@ -9,7 +9,7 @@ import {
 import "./user.css";
 import { Link, useLocation } from "react-router-dom";
 import Chart from "../../components/chart/Chart";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 import { useEffect, useMemo, useState } from "react";
 import { userRequest } from "../../requestMethods";
 
@@ -111,10 +111,10 @@ export default function User() {
               <MailOutline className="userShowIcon" />
               <span className="userShowInfoTitle">{user.email}</span>
             </div>
-            <div className="userShowInfo">
+            {/* <div className="userShowInfo">
               <LocationSearching className="userShowIcon" />
               <span className="userShowInfoTitle">{user.address}</span>
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="userUpdate">
@@ -146,14 +146,14 @@ export default function User() {
                   className="userUpdateInput"
                 />
               </div>
-              <div className="userUpdateItem">
+              {/* <div className="userUpdateItem">
                 <label>Address</label>
                 <input
                   type="text"
                   placeholder={user.address}
                   className="userUpdateInput"
                 />
-              </div>
+              </div> */}
             </div>
             <div className="userUpdateRight">
               <div className="userUpdateUpload">
