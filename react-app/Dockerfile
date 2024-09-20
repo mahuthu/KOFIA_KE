@@ -5,7 +5,7 @@ FROM node:18 AS build
 WORKDIR /app
 
 # Copy package.json and yarn.lock to the working directory
-COPY react-app/package.json react-app/yarn.lock ./
+COPY package.json yarn.lock ./
 
 # Set Yarn network timeout
 RUN yarn config set network-timeout 600000
@@ -14,7 +14,7 @@ RUN yarn config set network-timeout 600000
 RUN yarn install
 
 # Copy the rest of the application code to the working directory
-COPY react-app/ ./
+COPY . .
 
 # Build the React application
 RUN yarn build

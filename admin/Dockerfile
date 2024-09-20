@@ -5,7 +5,7 @@ FROM node:18 AS build
 WORKDIR /app
 
 # Copy package.json and yarn.lock to the working directory
-COPY admin/package.json admin/yarn.lock ./
+COPY package.json yarn.lock ./
 
 # Set Yarn network timeout
 RUN yarn config set network-timeout 600000
@@ -14,10 +14,10 @@ RUN yarn config set network-timeout 600000
 RUN yarn install
 
 # Copy the rest of the application code to the working directory
-COPY admin/ ./
+COPY . .
 
-# Build the React application
-RUN yarn build
+# Set the environment variable and build the React application
+RUN NODE_OPTIONS=--openssl-legacy-provider yarn build
 
 # Use a smaller image for the final build
 FROM nginx:alpine
