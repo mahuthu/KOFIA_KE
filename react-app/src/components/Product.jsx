@@ -36,6 +36,11 @@ const Container = styled.div`
   &:hover ${Info} {
     opacity: 1;
   }
+
+  @media (max-width: 768px) {
+    min-width: calc(50% - 10px); // 50% width minus margins
+    height: 250px; // Reduced height for smaller screens
+  }
 `;
 
 const Circle = styled.div`
@@ -44,11 +49,20 @@ const Circle = styled.div`
   border-radius: 50%;
   background-color: white;
   position: absolute;
+
+  @media (max-width: 768px) {
+    width: 150px;
+    height: 150px;
+  }
 `;
 
 const Image = styled.img`
   height: 75%;
   z-index: 2;
+
+  @media (max-width: 768px) {
+    height: 60%;
+  }
 `;
 
 const Icon = styled.div`
@@ -64,6 +78,12 @@ const Icon = styled.div`
   &:hover {
     background-color: ${(props) => (props.isWishlisted ? '#ff9999' : '#e9f5f5')};
     transform: scale(1.1);
+  }
+
+  @media (max-width: 768px) {
+    width: 30px;
+    height: 30px;
+    margin: 5px;
   }
 `;
 

@@ -5,21 +5,21 @@ import { Link } from "react-router-dom";
 const Container = styled.div`
   flex: 1;
   margin: 3px;
+  height: 70vh;
   position: relative;
   background-color: #f5fbfd;
-  overflow: hidden; // Prevent overflow
+  overflow: hidden;
   ${mobile({
-    height: "auto", // Allow container height to adjust based on content
+    flex: "0 0 calc(50% - 10px)", // Take up half the width minus margins
+    height: "30vh", // Reduce height on mobile
+    margin: "5px",
   })}
 `;
 
 const Image = styled.img`
   width: 100%;
-  height: auto; // Ensure height adjusts to maintain aspect ratio
-  ${mobile({
-    maxHeight: "100%", // Prevent the image from exceeding container height
-    objectFit: "cover", // Cover the container while preserving aspect ratio
-  })}
+  height: 100%;
+  object-fit: cover;
 `;
 
 const Info = styled.div`
@@ -33,13 +33,17 @@ const Info = styled.div`
   align-items: center;
   justify-content: center;
   color: #fcf1ed;
-  text-align: center; // Center text horizontally
-  padding: 10px; // Add padding to avoid text being too close to edges
-  box-sizing: border-box; // Ensure padding does not overflow container
+  text-align: center;
+  padding: 10px;
+  box-sizing: border-box;
+  background-color: rgba(0, 0, 0, 0.3); // Add a semi-transparent overlay
 `;
 
 const Title = styled.h1`
   margin-bottom: 20px;
+  ${mobile({
+    fontSize: "1.2rem", // Smaller font size on mobile
+  })}
 `;
 
 const Button = styled.button`
@@ -49,7 +53,24 @@ const Button = styled.button`
   color: teal;
   cursor: pointer;
   font-weight: 600;
-  border-radius: 5px; // Rounded corners for better appearance
+  border-radius: 5px;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background-color: teal;
+    color: white;
+    transform: scale(1.05);
+  }
+  
+  &:active {
+    background-color: #006666;
+    transform: scale(0.95);
+  }
+
+  ${mobile({
+    padding: "5px 10px",
+    fontSize: "0.8rem",
+  })}
 `;
 
 const CategoryItem = ({ item }) => {

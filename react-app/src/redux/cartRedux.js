@@ -14,13 +14,46 @@ const cartSlice = createSlice({
       state.products.push(action.payload);
       state.total += action.payload.price * action.payload.quantity;
     },
-    clearCart: (state) => {
-      state.products = [];
-      state.quantity = 0;
-      state.total = 0;
+    clearCart: (state, action) => {
+      const index = state.products.findIndex(product => product._id === action.payload);
+      if (index !== -1) {
+        const product = state.products[index];
+        state.quantity -= 1;
+        state.total -= product.price * product.quantity;
+        state.products.splice(index, 1);
+      }
+    },
+    updateProductQuantity: (state, action) => {
+      const { id, quantity } = action.payload;
+      const product = state.products.find(product => product._id === id);
+      if (product) {
+        const quantityDiff = quantity - product.quantity;
+        state.total += product.price * quantityDiff;
+        product.quantity = quantity;
+      }
+    },
+    updateProductColor: (state, action) => {
+      const { id, color } = action.payload;
+      const product = state.products.find(product => product._id === id);
+      if (product) {
+        product.color = color;
+      }
+    },
+    updateProductSize: (state, action) => {
+      const { id, size } = action.payload;
+      const product = state.products.find(product => product._id === id);
+      if (product) {
+        product.size = size;
+      }
     },
   },
 });
 
-export const { addProduct, clearCart } = cartSlice.actions;
+export const { 
+  addProduct, 
+  clearCart, 
+  updateProductQuantity, 
+  updateProductColor, 
+  updateProductSize 
+} = cartSlice.actions;
 export default cartSlice.reducer;
