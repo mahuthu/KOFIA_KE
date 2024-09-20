@@ -5,17 +5,24 @@ import { userRequest } from "../../requestMethods";
 
 export default function WidgetSm() {
   const [users, setUsers] = useState([]);
+  const [expandedUser, setExpandedUser] = useState(null);
 
   useEffect(() => {
     const getUsers = async () => {
       try {
         const res = await userRequest.get("users/?new=true");
         setUsers(res.data);
-      } catch {}
+      } catch (err) {
+        console.error("Error fetching users:", err);
+      }
     };
     getUsers();
   }, []);
   
+  const toggleUserDetails = (userId) => {
+    setExpandedUser(expandedUser === userId ? null : userId);
+  };
+
   return (
     <div className="widgetSm">
       <span className="widgetSmTitle">New Join Members</span>
@@ -32,11 +39,23 @@ export default function WidgetSm() {
             />
             <div className="widgetSmUser">
               <span className="widgetSmUsername">{user.username}</span>
+              <span className="widgetSmUserTitle">{user.email}</span>
             </div>
-            <button className="widgetSmButton">
+            <button 
+              className="widgetSmButton"
+              onClick={() => toggleUserDetails(user._id)}
+            >
               <Visibility className="widgetSmIcon" />
               Display
             </button>
+            {expandedUser === user._id && (
+              <div className="widgetSmUserDetails">
+                <p><strong>First Name:</strong> {user.firstName || "N/A"}</p>
+                <p><strong>Last Name:</strong> {user.lastName || "N/A"}</p>
+                <p><strong>Phone Number:</strong> {user.phoneNumber || "N/A"}</p>
+                <p><strong>Is Admin:</strong> {user.isAdmin ? "Yes" : "No"}</p>
+              </div>
+            )}
           </li>
         ))}
       </ul>

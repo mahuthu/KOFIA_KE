@@ -17,18 +17,8 @@ export default function Product() {
 
   const MONTHS = useMemo(
     () => [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Agu",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
+      "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
     ],
     []
   );
@@ -83,6 +73,18 @@ export default function Product() {
               <span className="productInfoKey">in stock:</span>
               <span className="productInfoValue">{product.countInStock}</span>
             </div>
+            <div className="productInfoItem">
+              <span className="productInfoKey">category:</span>
+              <span className="productInfoValue">{product.category.join(", ")}</span>
+            </div>
+            <div className="productInfoItem">
+              <span className="productInfoKey">sizes:</span>
+              <span className="productInfoValue">{product.size.join(", ")}</span>
+            </div>
+            <div className="productInfoItem">
+              <span className="productInfoKey">colors:</span>
+              <span className="productInfoValue">{product.color.join(", ")}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -100,11 +102,17 @@ export default function Product() {
               <option value="true">Yes</option>
               <option value="false">No</option>
             </select>
+            <label>Category</label>
+            <input type="text" placeholder={product.category.join(", ")} />
+            <label>Sizes</label>
+            <input type="text" placeholder={product.size.join(", ")} />
+            <label>Colors</label>
+            <input type="text" placeholder={product.color.join(", ")} />
           </div>
           <div className="productFormRight">
             <div className="productUpload">
               <img src={product.imageUrl} alt="" className="productUploadImg" />
-              <label for="file">
+              <label htmlFor="file">
                 <Publish />
               </label>
               <input type="file" id="file" style={{ display: "none" }} />

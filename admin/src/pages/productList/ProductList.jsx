@@ -33,11 +33,47 @@ export default function ProductList() {
         );
       },
     },
-    { field: "countInStock", headerName: "Stock", width: 200 },
+    { field: "countInStock", headerName: "Stock", width: 120 },
     {
       field: "price",
       headerName: "Price",
+      width: 120,
+    },
+    {
+      field: "category",
+      headerName: "Category",
       width: 160,
+      renderCell: (params) => {
+        return (
+          <div>
+            {params.row.category.join(", ")}
+          </div>
+        );
+      },
+    },
+    {
+      field: "size",
+      headerName: "Size",
+      width: 120,
+      renderCell: (params) => {
+        return (
+          <div>
+            {params.row.size.join(", ")}
+          </div>
+        );
+      },
+    },
+    {
+      field: "color",
+      headerName: "Color",
+      width: 120,
+      renderCell: (params) => {
+        return (
+          <div>
+            {params.row.color.join(", ")}
+          </div>
+        );
+      },
     },
     {
       field: "action",
@@ -61,6 +97,12 @@ export default function ProductList() {
 
   return (
     <div className="productList">
+      <div className="productTitleContainer">
+        <h1 className="productTitle">Product List</h1>
+        <Link to="/newproduct">
+          <button className="productAddButton">Create</button>
+        </Link>
+      </div>
       <DataGrid
         rows={products}
         disableSelectionOnClick

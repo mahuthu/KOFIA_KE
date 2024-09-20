@@ -16,18 +16,19 @@ const Container = styled.div`
 `;
 
 const Wrapper = styled.div` 
-    padding: 50px;
+    padding: 20px;
     display: flex;
     ${mobile({ padding: "10px", flexDirection: "column" })}
 `;
 
 const ImgContainer = styled.div`
     flex: 1;
+    ${mobile({ marginBottom: "20px" })}
 `;
 
 const Image = styled.img`
-    width: 100%;
-    height: 90vh;
+    width: 80%;
+    height: 60vh;
     object-fit: cover;
     ${mobile({ height: "40vh" })}
 `;
@@ -40,33 +41,38 @@ const InfoContainer = styled.div`
 
 const Title = styled.h1`
     font-weight: 200;
+    ${mobile({ fontSize: "24px" })}
 `;
 
 const Desc = styled.p`
     margin: 20px 0px;
+    ${mobile({ fontSize: "14px" })}
 `;
 
 const Price = styled.span`
     font-weight: 100;
     font-size: 40px;
+    ${mobile({ fontSize: "28px" })}
 `;
 
 const FilterContainer = styled.div`
-    width: 50%;
+    width: 100%;
     margin: 30px 0px;
     display: flex;
     justify-content: space-between;
-    ${mobile({ width: "100%" })}
+    flex-wrap: wrap;
 `;
 
 const Filter = styled.div`
     display: flex;
     align-items: center;
+    margin-bottom: 10px;
 `;
 
 const FilterTitle = styled.span`
     font-size: 20px;
     font-weight: 200;
+    margin-right: 10px;
 `;
 
 const FilterColor = styled.div`
@@ -76,27 +82,28 @@ const FilterColor = styled.div`
     background-color: ${props => props.color};
     margin: 0px 5px;
     cursor: pointer;
+    border: 1px solid #ddd;
 `;
 
 const FilterSize = styled.select`
-    margin-left: 10px;
     padding: 5px;
 `;
 
 const FilterSizeOption = styled.option``;
 
 const AddContainer = styled.div`
-    width: 50%;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    ${mobile({ width: "100%" })}
+    flex-wrap: wrap;
 `;
 
 const AmountContainer = styled.div`
     display: flex;
     align-items: center;
     font-weight: 700;
+    margin-bottom: 20px;
 `;
 
 const Amount = styled.span`
@@ -116,9 +123,18 @@ const Button = styled.button`
     background-color: white;
     cursor: pointer;
     font-weight: 500;
+    transition: all 0.3s ease;
     &:hover {
-        background-color: #f8f4f4;
+        background-color: teal;
+        color: white;
     }
+    ${mobile({ width: "100%", marginTop: "20px" })}
+`;
+
+const CountInStock = styled.p`
+    margin-top: 10px;
+    font-size: 14px;
+    color: ${props => props.inStock ? "green" : "red"};
 `;
 
 const Product = () => {
@@ -175,8 +191,12 @@ const Product = () => {
                 <InfoContainer>
                     <Title>{product.title}</Title>
                     <Desc>{product.description}</Desc>
-                    <Price>{product.price}</Price>
-                    <countInStock>{product.countInStock}</countInStock>
+                    <Price>kSH{product.price}</Price>
+                    <CountInStock inStock={product.countInStock > 0}>
+                        {product.countInStock > 0 
+                            ? `In Stock: ${product.countInStock}`
+                            : "Out of Stock"}
+                    </CountInStock>
                     <FilterContainer>
                         <Filter>
                             <FilterTitle>Color</FilterTitle>
@@ -187,6 +207,7 @@ const Product = () => {
                         <Filter>
                             <FilterTitle>Size</FilterTitle>
                             <FilterSize onChange={(e) => setSize(e.target.value)}>
+                                <FilterSizeOption>Select Size</FilterSizeOption>
                                 {Array.isArray(product.size) && product.size.map((s) => (
                                     <FilterSizeOption key={s}>{s}</FilterSizeOption>
                                 ))}
@@ -199,7 +220,9 @@ const Product = () => {
                             <Amount>{quantity}</Amount>
                             <Add onClick={() => handleQuantity("inc")} />
                         </AmountContainer>
-                        <Button onClick={handleClick}>ADD TO CART</Button>
+                        <Button onClick={handleClick} disabled={product.countInStock === 0}>
+                            {product.countInStock === 0 ? "OUT OF STOCK" : "ADD TO CART"}
+                        </Button>
                     </AddContainer>
                 </InfoContainer>
             </Wrapper>

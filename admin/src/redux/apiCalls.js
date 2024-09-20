@@ -78,8 +78,14 @@ export const addProduct = async (product, dispatch) => {
   try {
     const res = await userRequest.post(`/products`, product);
     dispatch(addProductSuccess(res.data));
+    console.log("Product added successfully:", res.data);
+
   } catch (err) {
     dispatch(addProductFailure());
+    console.error("Failed to add product:", err);
+    throw err;
+
+
   }
 };
 
