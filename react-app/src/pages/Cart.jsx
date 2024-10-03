@@ -1,344 +1,457 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate, Link } from 'react-router-dom';
+import styled from 'styled-components';
 import { Add, Remove } from "@material-ui/icons";
-import styled from "styled-components";
-import Announcement from "../components/Announcement";
-import Footer from "../components/Footer";
-import Navbar from "../components/Navbar";
-import { mobile } from "../responsive";
-import { useSelector, useDispatch } from "react-redux";
-import { updateProductQuantity, clearCart } from "../redux/cartRedux";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { Link } from 'react-router-dom';
 
-const Container = styled.div``;
+import axios from 'axios';
 
-const Wrapper = styled.div`
-  padding: 20px;
-  ${mobile({ padding: "10px" })}
-`;
+// Redux actions
+import { updateProductQuantity, clearCart } from '../redux/cartRedux';
 
-const Title = styled.h1`
-  font-weight: 300;
-  text-align: center;
-`;
+// Components
+import Navbar from '../components/Navbar';
+import Announcement from '../components/Announcement';
+import Footer from '../components/Footer';
 
-const Top = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px;
-`;
-
-const TopButton = styled.button`
-  padding: 10px;
-  font-weight: 600;
-  cursor: pointer;
-  border: ${(props) => props.type === "filled" ? "none" : "1px solid black"};
-  background-color: ${(props) =>
-    props.type === "filled" ? "black" : "transparent"};
-  color: ${(props) => props.type === "filled" ? "white" : "black"};
-  transition: all 0.3s ease;
-
-  &:hover {
-    background-color: ${(props) =>
-      props.type === "filled" ? "#333" : "#f8f8f8"};
-  }
-
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-  }
-`;
-
-const TopTexts = styled.div`
-  ${mobile({ display: "none" })}
-`;
-
-const TopText = styled.span`
-  text-decoration: underline;
-  cursor: pointer;
-  margin: 0px 10px;
-`;
-
-const Bottom = styled.div`
-  display: flex;
-  justify-content: space-between;
-  ${mobile({ flexDirection: "column" })}
-`;
-
-const Info = styled.div`
-  flex: 3;
-`;
-
-const Product = styled.div`
-  display: flex;
-  justify-content: space-between;
-  ${mobile({ flexDirection: "column" })}
-`;
-
-const ProductDetail = styled.div`
-  flex: 2;
-  display: flex;
-`;
-
-const Image = styled.img`
-  width: 200px;
-`;
-
-const Details = styled.div`
-  padding: 20px;
+// Styled Components
+const PageContainer = styled.div`
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
 `;
 
-const ProductName = styled.span``;
+const MainContent = styled.div`
+  padding: 2rem;
+  flex: 1;
+  
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
+`;
 
-const ProductId = styled.span``;
+const PageTitle = styled.h1`
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  font-weight: 600;
+`;
 
-const ProductColor = styled.div`
+const TopSection = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 1rem;
+  }
+`;
+
+const ActionButton = styled.button`
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  ${props => props.primary ? `
+    background-color: #000;
+    color: white;
+    border: none;
+    
+    &:hover {
+      background-color: #333;
+    }
+  ` : `
+    background-color: transparent;
+    color: #000;
+    border: 1px solid #000;
+    
+    &:hover {
+      background-color: #f5f5f5;
+    }
+  `}
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+`;
+
+const CartStats = styled.div`
+  display: flex;
+  gap: 1rem;
+  
+  a {
+    text-decoration: none;
+    color: inherit;
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+`;
+
+const MainSection = styled.div`
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  
+  @media (max-width: 968px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const CartItems = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+`;
+
+const CartItem = styled.div`
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const ProductImage = styled.img`
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 4px;
+`;
+
+const ProductDetails = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+`;
+
+const ProductTitle = styled.h3`
+  font-weight: 500;
+  margin: 0;
+`;
+
+const ProductInfo = styled.div`
+  display: flex;
+  gap: 1rem;
+  color: #666;
+  font-size: 0.9rem;
+`;
+
+const ColorCircle = styled.div`
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background-color: ${(props) => props.color};
+  background-color: ${props => props.color};
   border: 1px solid #ddd;
-  display: inline-block;
-  margin-left: 5px;
-  ${mobile({ marginBottom: "10px" })}
 `;
 
-const ProductSize = styled.span`
-  ${mobile({ marginBottom: "10px" })}
-`;
-
-const PriceDetail = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`;
-
-const ProductAmountContainer = styled.div`
+const QuantityControls = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
-`;
-
-const ProductAmount = styled.div`
-  font-size: 24px;
-  margin: 5px;
-  ${mobile({ margin: "5px 15px" })}
-`;
-
-const ProductPrice = styled.div`
-  font-size: 30px;
-  font-weight: 200;
-  ${mobile({ marginBottom: "20px" })}
-`;
-
-const Hr = styled.hr`
-  background-color: #eee;
-  border: none;
-  height: 1px;
+  gap: 1rem;
 `;
 
 const Summary = styled.div`
-  flex: 1;
-  border: 0.5px solid lightgray;
-  border-radius: 10px;
-  padding: 20px;
-  height: 50vh;
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  height: fit-content;
 `;
 
-const SummaryTitle = styled.h1`
-  font-weight: 200;
+const SummaryTitle = styled.h2`
+  margin-bottom: 1.5rem;
 `;
 
 const SummaryItem = styled.div`
-  margin: 30px 0px;
   display: flex;
   justify-content: space-between;
-  font-weight: ${(props) => props.type === "total" && "500"};
-  font-size: ${(props) => props.type === "total" && "24px"};
+  margin-bottom: 1rem;
+  font-size: ${props => props.total ? '1.2rem' : '1rem'};
+  font-weight: ${props => props.total ? '600' : '400'};
 `;
 
-const SummaryItemText = styled.span``;
-
-const SummaryItemPrice = styled.span``;
-
-const Button = styled.button`
+// Modal Components
+const Modal = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  padding: 10px;
-  background-color: black;
-  color: white;
-  font-weight: 600;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+`;
+
+const ModalContent = styled.div`
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+`;
+
+const PaymentOption = styled.div`
+  padding: 1rem;
+  border: 2px solid ${props => props.selected ? '#000' : '#ddd'};
+  border-radius: 6px;
+  margin-bottom: 1rem;
   cursor: pointer;
-  transition: all 0.3s ease;
-
+  transition: all 0.2s ease;
+  
   &:hover {
-    background-color: #333;
-  }
-
-  &:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
+    border-color: #000;
   }
 `;
 
-const RemoveButton = styled.button`
-  padding: 5px 10px;
-  background-color: teal;
-  color: white;
-  border: none;
-  cursor: pointer;
-  margin-top: 10px;
-  transition: all 0.3s ease;
-
-  &:hover {
-    background-color: #ff1a1a;
+const PhoneInput = styled.input`
+  width: 100%;
+  padding: 0.75rem;
+  margin-top: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  
+  &:focus {
+    outline: none;
+    border-color: #000;
   }
 `;
 
-const EmptyCartMessage = styled.p`
+const EmptyCartMessage = styled.div`
   text-align: center;
-  font-size: 18px;
-  margin: 20px 0;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 `;
 
 const Cart = () => {
-  const cart = useSelector((state) => state.cart);
-  const wishlist = useSelector((state) => state.wishlist);
-  const currentUser = useSelector((state) => state.user.currentUser);
-  const navigate = useNavigate();
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [paymentPhone, setPaymentPhone] = useState('registered');
+  const [newPhoneNumber, setNewPhoneNumber] = useState('');
+  
+  const cart = useSelector(state => state.cart);
+  const wishlist = useSelector(state => state.wishlist);
+  const currentUser = useSelector(state => state.user.currentUser);
   const dispatch = useDispatch();
-
-  const handleCheckout = async () => {
-    if (cart.quantity === 0) {
-      alert("Your cart is empty. Add some items before checking out.");
-      return;
-    }
-    const amount = cart.total;
-    const localPhoneNumber = currentUser?.phoneNumber;
-    const phone = `254${localPhoneNumber.slice(1)}`;
-
-    try {
-      const response = await axios.post("http://localhost:5000/api/authentication/stkpush", { phone, amount });
-      console.log("STK Push Response:", response.data);
-      alert("STK Push initiated. Check your phone for the prompt.");
-      console.log("Cart:", cart);
-      navigate(`/success`, { state: { cart: cart } });
-    } catch (error) {
-      console.error("STK Push Error:", error.message);
-      alert("Failed to initiate STK Push.");
-    }
-  };
-
-  const handleContinueShopping = () => {
-    navigate('/');
-  };
+  const navigate = useNavigate();
 
   const handleQuantityChange = (productId, type) => {
     const product = cart.products.find(p => p._id === productId);
     let newQuantity = product.quantity;
-    if (type === "dec") {
+    
+    if (type === "decrease") {
       newQuantity = Math.max(1, product.quantity - 1);
-    } else if (type === "inc") {
+    } else {
       newQuantity = product.quantity + 1;
     }
+    
     dispatch(updateProductQuantity({ id: productId, quantity: newQuantity }));
   };
 
-  const handleRemoveProduct = (productId) => {
+  const handleRemoveItem = (productId) => {
     dispatch(clearCart(productId));
   };
 
+  const initiateCheckout = () => {
+    if (cart.quantity === 0) {
+      alert("Your cart is empty. Please add items before checking out.");
+      return;
+    }
+    setShowPaymentModal(true);
+  };
+
+  const handlePayment = async () => {
+    const amount = 1  //cart.total;
+    let phoneToUse;
+
+    if (paymentPhone === 'registered') {
+      const localPhoneNumber = currentUser?.phoneNumber;
+      phoneToUse = `254${localPhoneNumber.slice(1)}`;
+    } else {
+      if (!newPhoneNumber || newPhoneNumber.length < 10) {
+        alert("Please enter a valid phone number");
+        return;
+      }
+      phoneToUse = `254${newPhoneNumber.slice(1)}`;
+    }
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/authentication/stkpush", 
+        { phone: phoneToUse, amount }
+      );
+      
+      console.log("Payment initiated:", response.data);
+      alert("Please check your phone for the payment prompt");
+      setShowPaymentModal(false);
+      navigate(`/success`, { state: { cart: cart } });
+      console.log(cart);
+    } catch (error) {
+      console.error("Payment failed:", error);
+      alert("Failed to initiate payment. Please try again.");
+    }
+  };
+
   return (
-    <Container>
+    <PageContainer>
       <Navbar />
       <Announcement />
-      <Wrapper>
-        <Title>YOUR BAG</Title>
-        <Top>
-          <TopButton onClick={handleContinueShopping}>CONTINUE SHOPPING</TopButton>
-          <TopTexts>
-            <Link to="/cart" style={{ textDecoration: 'none', color: 'inherit' }}>
-              <TopText>Shopping Bag({cart.quantity})</TopText>
-            </Link>
-            <Link to="/wishlist" style={{ textDecoration: 'none', color: 'inherit' }}>
-              <TopText>Your Wishlist({wishlist.items.length})</TopText>
-            </Link>
-          </TopTexts>
-          <TopButton type="filled" onClick={handleCheckout} disabled={cart.quantity === 0}>CHECKOUT NOW</TopButton>
-        </Top>
-        <Bottom>
-          <Info>
+      
+      <MainContent>
+        <PageTitle>Your Shopping Cart</PageTitle>
+        
+        <TopSection>
+          <ActionButton onClick={() => navigate('/')}>
+            Continue Shopping
+          </ActionButton>
+          
+          <CartStats>
+            <Link to="/cart">Cart Items ({cart.quantity})</Link>
+            <Link to="/wishlist">Wishlist ({wishlist.items.length})</Link>
+          </CartStats>
+          
+          <ActionButton 
+            primary 
+            disabled={cart.quantity === 0}
+            onClick={initiateCheckout}
+          >
+            Checkout Now
+          </ActionButton>
+        </TopSection>
+
+        <MainSection>
+          <CartItems>
             {cart.products.length > 0 ? (
               cart.products.map((product) => (
-                <Product key={product._id}>
-                  <ProductDetail>
-                    <Image src={product.imageUrl} />
-                    <Details>
-                      <ProductName>
-                        <b>Product:</b> {product.title}
-                      </ProductName>
-                      <ProductId>
-                        <b>ID:</b> {product._id}
-                      </ProductId>
-                      <div>
-                        <b>Color:</b>
-                        <ProductColor color={product.color} />
-                      </div>
-                      <ProductSize>
-                        <b>Size:</b> {product.size}
-                      </ProductSize>
-                    </Details>
-                  </ProductDetail>
-                  <PriceDetail>
-                    <ProductAmountContainer>
-                      <Remove onClick={() => handleQuantityChange(product._id, "dec")} style={{ cursor: 'pointer' }} />
-                      <ProductAmount>{product.quantity}</ProductAmount>
-                      <Add onClick={() => handleQuantityChange(product._id, "inc")} style={{ cursor: 'pointer' }} />
-                    </ProductAmountContainer>
-                    <ProductPrice>$ {product.price * product.quantity}</ProductPrice>
-                    <RemoveButton onClick={() => handleRemoveProduct(product._id)}>
+                <CartItem key={product._id}>
+                  <ProductImage src={product.imageUrl} alt={product.title} />
+                  
+                  <ProductDetails>
+                    <ProductTitle>{product.title}</ProductTitle>
+                    <ProductInfo>
+                      <span>ID: {product._id}</span>
+                      <span>Size: {product.size}</span>
+                      <ColorCircle color={product.color} />
+                    </ProductInfo>
+                    
+                    <QuantityControls>
+                      <Remove 
+                        onClick={() => handleQuantityChange(product._id, "decrease")}
+                        style={{ cursor: 'pointer' }}
+                      />
+                      <span>{product.quantity}</span>
+                      <Add 
+                        onClick={() => handleQuantityChange(product._id, "increase")}
+                        style={{ cursor: 'pointer' }}
+                      />
+                    </QuantityControls>
+                    
+                    <ActionButton onClick={() => handleRemoveItem(product._id)}>
                       Remove
-                    </RemoveButton>
-                  </PriceDetail>
-                </Product>
+                    </ActionButton>
+                  </ProductDetails>
+                  
+                  <div>
+                    <strong>KSH {product.price * product.quantity}</strong>
+                  </div>
+                </CartItem>
               ))
             ) : (
-              <EmptyCartMessage>Your cart is empty. Add some items to get started!</EmptyCartMessage>
+              <EmptyCartMessage>
+                <h3>Your cart is empty</h3>
+                <p>Add some items to get started!</p>
+              </EmptyCartMessage>
             )}
-            <Hr />
-          </Info>
+          </CartItems>
+
           <Summary>
-            <SummaryTitle>ORDER SUMMARY</SummaryTitle>
+            <SummaryTitle>Order Summary</SummaryTitle>
             <SummaryItem>
-              <SummaryItemText>Subtotal</SummaryItemText>
-              <SummaryItemPrice>$ {cart.total}</SummaryItemPrice>
-            </SummaryItem>
-            <SummaryItem>
-              <SummaryItemText>Estimated Shipping</SummaryItemText>
-              <SummaryItemPrice>$ 0</SummaryItemPrice>
+              <span>Subtotal</span>
+              <span>KSH {cart.total}</span>
             </SummaryItem>
             <SummaryItem>
-              <SummaryItemText>Shipping Discount</SummaryItemText>
-              <SummaryItemPrice>$ 0</SummaryItemPrice>
+              <span>Shipping</span>
+              <span>KSH 0</span>
             </SummaryItem>
-            <SummaryItem type="total">
-              <SummaryItemText>Total</SummaryItemText>
-              <SummaryItemPrice>$ {cart.total}</SummaryItemPrice>
+            <SummaryItem>
+              <span>Discount</span>
+              <span>KSH 0</span>
             </SummaryItem>
-            <Button onClick={handleCheckout} disabled={cart.quantity === 0}>
-              CHECKOUT NOW
-            </Button>
+            <SummaryItem total>
+              <span>Total</span>
+              <span>KSH {cart.total}</span>
+            </SummaryItem>
+            
+            <ActionButton 
+              primary 
+              disabled={cart.quantity === 0}
+              onClick={initiateCheckout}
+            >
+              Proceed to Checkout
+            </ActionButton>
           </Summary>
-        </Bottom>
-      </Wrapper>
+        </MainSection>
+      </MainContent>
+
+      {showPaymentModal && (
+        <Modal>
+          <ModalContent>
+            <h2>Choose Payment Phone Number</h2>
+            
+            <PaymentOption
+              selected={paymentPhone === 'registered'}
+              onClick={() => setPaymentPhone('registered')}
+            >
+              <h3>Use Registered Number</h3>
+              <p>{currentUser?.phoneNumber}</p>
+            </PaymentOption>
+            
+            <PaymentOption
+              selected={paymentPhone === 'new'}
+              onClick={() => setPaymentPhone('new')}
+            >
+              <h3>Use Different Number</h3>
+              {paymentPhone === 'new' && (
+                <PhoneInput
+                  type="tel"
+                  placeholder="Enter phone number (e.g., 0712345678)"
+                  value={newPhoneNumber}
+                  onChange={(e) => setNewPhoneNumber(e.target.value)}
+                />
+              )}
+            </PaymentOption>
+            
+            <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+              <ActionButton onClick={() => setShowPaymentModal(false)}>
+                Cancel
+              </ActionButton>
+              <ActionButton primary onClick={handlePayment}>
+                Proceed to Pay
+              </ActionButton>
+            </div>
+          </ModalContent>
+        </Modal>
+      )}
+      
       <Footer />
-    </Container>
+    </PageContainer>
   );
 };
 

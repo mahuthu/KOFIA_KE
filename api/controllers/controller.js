@@ -74,7 +74,7 @@ const postStk = async (req, res) => {
       PartyA: phone,
       PartyB: shortCode,
       PhoneNumber: phone,
-      CallBackURL: "https://4883-105-29-165-234.ngrok-free.app/api/authentication/callback", // Update to use your local or production callback URL
+      CallBackURL: "https://cde4-105-29-165-234.ngrok-free.app/api/authentication/callback", // Update to use your local or production callback URL
       AccountReference: "purchase",
       TransactionDesc: "purchase",
     };

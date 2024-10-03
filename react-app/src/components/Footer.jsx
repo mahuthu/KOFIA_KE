@@ -30,10 +30,12 @@ const Left = styled.div`
 
 const Logo = styled.h1`
   margin-bottom: 20px;
+  color: #000
 `;
 
 const Desc = styled.p`
   margin-bottom: 20px;
+  color: #fff;
   ${mobile({ textAlign: "center" })} // Center text on small screens
 `;
 
@@ -115,21 +117,29 @@ const Footer = () => {
       <Left>
         <Logo>KOFIA_KE</Logo>
         <Desc>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quibusdam.
+          The No 1 Online Authentic Headwear Shop in Kenya.
         </Desc>
         <SocialContainer>
-          <SocialIcon color="3B5999">
-            <Facebook />
-          </SocialIcon>
-          <SocialIcon color="E4405F">
-            <Instagram />
-          </SocialIcon>
-          <SocialIcon color="55ACEE">
-            <Twitter />
-          </SocialIcon>
-          <SocialIcon color="E60023">
-            <Pinterest />
-          </SocialIcon>
+          <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
+            <SocialIcon color="3B5999">
+              <Facebook />
+            </SocialIcon>
+          </a>
+          <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
+            <SocialIcon color="E4405F">
+              <Instagram />
+            </SocialIcon>
+          </a>
+          <a href="https://x.com/KOFIA_KE" target="_blank" rel="noopener noreferrer">
+            <SocialIcon color="55ACEE">
+              <Twitter />
+            </SocialIcon>
+          </a>
+          <a href="https://www.pinterest.com" target="_blank" rel="noopener noreferrer">
+            <SocialIcon color="E60023">
+              <Pinterest />
+            </SocialIcon>
+          </a>
         </SocialContainer>
       </Left>
       
@@ -139,10 +149,10 @@ const Footer = () => {
           <ListItem>Home</ListItem>
           <ListItem>Cart</ListItem>
           <ListItem>Fitted</ListItem>
-          <ListItem>Adjustable</ListItem>
+          <ListItem>Order Tracking</ListItem>
           <ListItem>Buckets</ListItem>
           <ListItem>My Account</ListItem>
-          <ListItem>Order Tracking</ListItem>
+          <ListItem>Adjustable</ListItem>
           <ListItem>Wishlist</ListItem>
           <ListItem>Terms</ListItem>
         </List>
@@ -154,17 +164,17 @@ const Footer = () => {
           <Room style={{ marginRight: "10px" }} /> Nairobi, Kenya
         </ContactItem>
         <ContactItem>
-          <Phone style={{ marginRight: "10px" }} /> +254-726258462
+          <Phone style={{ marginRight: "10px" }} /> +254-793-704-217
         </ContactItem>
         <ContactItem>
-          <MailOutline style={{ marginRight: "10px" }} /> KOFIA_KE.co.ke
+          <MailOutline style={{ marginRight: "10px" }} /> info@kofia.co.ke
         </ContactItem>
         <Payment src="https://i.ibb.co/Qfvn4z6/payment.png" />
       </Right>
 
       <DesignerLink>
         <StyledLink href="https://savannahinc.co.ke" target="_blank" rel="noopener noreferrer">
-          Designed by SavannahInc
+        © 2024 Savannah Inc, All Rights Reserved. | Privacy Policy | Terms of Use
         </StyledLink>
       </DesignerLink>
     </Container>

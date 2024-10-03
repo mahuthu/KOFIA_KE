@@ -24,6 +24,9 @@ const Left = styled.div`
   flex: 1;
   display: flex;
   align-items: center;
+  @media only screen and (max-width: 380px) {
+    margin-right: 15px; // Add space between search and logo
+  }
 `;
 
 const SearchContainer = styled.div`
@@ -32,6 +35,9 @@ const SearchContainer = styled.div`
   align-items: center;
   margin-left: 25px;
   padding: 5px;
+  @media only screen and (max-width: 380px) {
+    margin-left: 15px; // Reduce left margin on very small screens
+  }
 `;
 
 const Input = styled.input`
@@ -42,11 +48,17 @@ const Input = styled.input`
 const Center = styled.div`
   flex: 1;
   text-align: center;
+  @media only screen and (max-width: 380px) {
+    margin-left: 15px; // Add space on the left of the logo
+  }
 `;
 
 const Logo = styled.h1`
   font-weight: bold;
   ${mobile({ fontSize: '24px' })}
+  @media only screen and (max-width: 380px) {
+    font-size: 20px; // Slightly smaller font on very small screens
+  }
 `;
 
 const Right = styled.div`
@@ -143,7 +155,6 @@ const Navbar = () => {
               <DesktopMenuItem>
                 <Link to="/profile" style={{ textDecoration: 'none', color: 'inherit' }}>
                   <Person />
-                  PROFILE
                 </Link>
               </DesktopMenuItem>
               {wishlist.length > 0 && (
@@ -174,7 +185,6 @@ const Navbar = () => {
               <Link to="/profile" style={{ textDecoration: 'none', color: 'inherit' }}>
                 <MobileMenuItem>
                   <Person />
-                  Profile
                 </MobileMenuItem>
               </Link>
               {wishlist.length > 0 && (
