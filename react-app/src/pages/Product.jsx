@@ -191,7 +191,7 @@ const Product = () => {
                 <InfoContainer>
                     <Title>{product.title}</Title>
                     <Desc>{product.description}</Desc>
-                    <Price>kSH{product.price}</Price>
+                    <Price>KSH{product.price}</Price>
                     <CountInStock inStock={product.countInStock > 0}>
                         {product.countInStock > 0 
                             ? `In Stock: ${product.countInStock}`

@@ -8,6 +8,8 @@ import Success from './pages/Success';
 import PrivateRoute from "./components/PrivateRoute";
 import UserProfile from "./pages/UserProfile";
 import Wishlist from './pages/WishList';
+import SearchResults from './components/SearchResults';
+
 
 
 
@@ -39,6 +41,7 @@ const App = () => {
         <Route path="/cart" element={<PrivateRoute element={Cart} />} />
         <Route path="/success" element={<Success />} />
         <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
+        <Route path="/search" element={<SearchResults />} />
         <Route path="/register" element={user ? <Navigate to="/" /> : <Register />} />
       </Routes>
     </Router>

@@ -174,7 +174,7 @@ const Footer = () => {
 
       <DesignerLink>
         <StyledLink href="https://savannahinc.co.ke" target="_blank" rel="noopener noreferrer">
-        © 2024 Savannah Inc, All Rights Reserved. | Privacy Policy | Terms of Use
+        © 2024 Savannah Inc, All Rights Reserved.
         </StyledLink>
       </DesignerLink>
     </Container>

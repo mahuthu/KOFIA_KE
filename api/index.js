@@ -14,13 +14,16 @@ const productRoute = require('./routes/product');
 const cartRoute = require('./routes/cart');
 const orderRoute = require('./routes/order');
 const authentication = require('./routes/authentication');
+const searchRoutes = require('./routes/searchRoutes');
+
 
 // Define allowed origins
 const allowedOrigins = [
+  'http://localhost:5000',   // Local frontend (React)
   'http://34.111.185.192',   // Ingress IP
   'http://localhost:3000',   // Local frontend (React)
   'http://localhost:3001'    // Local dashboard
-];
+  ];
 
 // CORS configuration with dynamic origin handling
 app.use(cors({
@@ -63,6 +66,7 @@ app.use("/api/products", productRoute);
 app.use("/api/carts", cartRoute);
 app.use("/api/orders", orderRoute);
 app.use("/api/authentication", authentication);
+app.use("/api/search", searchRoutes);
 
 // Error handling middleware
 app.use(errorHandler);

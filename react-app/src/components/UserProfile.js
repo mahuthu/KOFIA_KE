@@ -7,26 +7,33 @@ const Container = styled.div`
   width: 100vw;
   height: 100vh;
   background: linear-gradient(
-    rgba(255, 255, 255, 0.5),
-    rgba(255, 255, 255, 0.5)
-  ),
-  url("https://images.pexels.com/photos/6984650/pexels-photo-6984650.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940")
-    center;
+      rgba(255, 255, 255, 0.5),
+      rgba(255, 255, 255, 0.5)
+    ),
+    url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxFhakrAVnq1QmaYU6nyyOxejOy0N7unAeCA&usqp=CAU")
+      center;
   background-size: cover;
+  background-position: center;
   display: flex;
   align-items: center;
   justify-content: center;
 `;
 
 const Wrapper = styled.div`
-  width: 25%;
-  padding: 20px;
-  background-color: white;
+  width: 100%;
+  max-width: 500px;
+  padding: 40px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 `;
 
 const Title = styled.h1`
-  font-size: 24px;
-  font-weight: 300;
+  font-size: 28px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 30px;
+  text-align: center;
 `;
 
 const Form = styled.form`
@@ -37,28 +44,44 @@ const Form = styled.form`
 const InputGroup = styled.div`
   display: flex;
   flex-direction: column;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 `;
 
 const Label = styled.label`
   margin-bottom: 5px;
   font-size: 14px;
+  font-weight: 600;
+  color: #555;
 `;
 
 const Input = styled.input`
-  flex: 1;
-  min-width: 40%;
-  padding: 10px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  transition: border-color 0.3s;
+
+  &:focus {
+    outline: none;
+    border-color: #4a90e2;
+  }
 `;
 
 const Button = styled.button`
-  width: 40%;
-  border: none;
-  padding: 15px 20px;
-  background-color: teal;
+  width: 100%;
+  padding: 15px;
+  background-color: #000;
   color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
-  margin-bottom: 10px;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: teal;
+  }
 `;
 
 const UserProfile = () => {

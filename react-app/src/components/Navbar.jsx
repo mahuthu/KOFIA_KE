@@ -116,6 +116,7 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const handleLogout = () => {
     dispatch(logoutUser());
@@ -124,6 +125,13 @@ const Navbar = () => {
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      navigate(`/search?term=${encodeURIComponent(searchTerm)}`);
+    }
   };
 
   return (
@@ -136,8 +144,17 @@ const Navbar = () => {
             <MenuIcon onClick={toggleMobileMenu} />
           )}
           <SearchContainer>
-            <Input placeholder="search" />
-            <Search style={{ color: 'gray', fontSize: 16 }} />
+            <form onSubmit={handleSearch}>
+              <Input 
+                placeholder="search" 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <Search 
+                style={{ color: 'gray', fontSize: 16, cursor: 'pointer' }} 
+                onClick={handleSearch}
+              />
+            </form>
           </SearchContainer>
         </Left>
         <Center><Logo>KOFIA_KE</Logo></Center>
