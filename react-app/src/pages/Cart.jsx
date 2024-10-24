@@ -155,6 +155,14 @@ const ColorCircle = styled.div`
   border-radius: 50%;
   background-color: ${props => props.color};
   border: 1px solid #ddd;
+  display: inline-block;
+  margin-right: 5px;
+`;
+
+const ColorContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 5px;
 `;
 
 const QuantityControls = styled.div`
@@ -203,6 +211,20 @@ const ModalContent = styled.div`
   border-radius: 8px;
   width: 90%;
   max-width: 500px;
+  
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+  }
+`;
+
+const ModalTitle = styled.h2`
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  
+  @media (max-width: 768px) {
+    font-size: 1.25rem;
+  }
 `;
 
 const PaymentOption = styled.div`
@@ -215,6 +237,25 @@ const PaymentOption = styled.div`
   
   &:hover {
     border-color: #000;
+  }
+  
+  h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    
+    @media (max-width: 768px) {
+      font-size: 0.9rem;
+    }
+  }
+  
+  p {
+    font-size: 0.9rem;
+    color: #666;
+    
+    @media (max-width: 768px) {
+      font-size: 0.8rem;
+    }
   }
 `;
 
@@ -229,6 +270,11 @@ const PhoneInput = styled.input`
   &:focus {
     outline: none;
     border-color: #000;
+  }
+  
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+    padding: 0.6rem;
   }
 `;
 
@@ -293,7 +339,7 @@ const Cart = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/authentication/stkpush", 
+        "https;//kofia.co.ke/api/authentication/stkpush", 
         { phone: phoneToUse, amount }
       );
       
@@ -347,7 +393,15 @@ const Cart = () => {
                     <ProductInfo>
                       <span>ID: {product._id}</span>
                       <span>Size: {product.size}</span>
-                      <ColorCircle color={product.color} />
+                      <ColorContainer>
+                        {product.color ? (
+                          <ColorCircle color={product.color} />
+                        ) : (
+                          product.colors && product.colors.map((color, index) => (
+                            <ColorCircle key={index} color={color} />
+                          ))
+                        )}
+                      </ColorContainer>
                     </ProductInfo>
                     
                     <QuantityControls>
@@ -413,7 +467,7 @@ const Cart = () => {
       {showPaymentModal && (
         <Modal>
           <ModalContent>
-            <h2>Choose Payment Phone Number</h2>
+            <ModalTitle>Choose Payment Phone Number</ModalTitle>
             
             <PaymentOption
               selected={paymentPhone === 'registered'}

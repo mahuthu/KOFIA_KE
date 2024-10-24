@@ -40,19 +40,20 @@ const InfoContainer = styled.div`
 `;
 
 const Title = styled.h1`
-    font-weight: 200;
+    font-weight: 500;
     ${mobile({ fontSize: "24px" })}
 `;
 
 const Desc = styled.p`
     margin: 20px 0px;
+    font-weight: 500;
     ${mobile({ fontSize: "14px" })}
 `;
 
 const Price = styled.span`
-    font-weight: 100;
-    font-size: 40px;
-    ${mobile({ fontSize: "28px" })}
+    font-weight: 600;
+    font-size: 23px;
+    ${mobile({ fontSize: "20px" })}
 `;
 
 const FilterContainer = styled.div`

@@ -8,7 +8,7 @@ import Success from './pages/Success';
 import PrivateRoute from "./components/PrivateRoute";
 import UserProfile from "./pages/UserProfile";
 import Wishlist from './pages/WishList';
-import SearchResults from './components/SearchResults';
+import SearchResults from './pages/searchpage';
 
 
 

@@ -4,12 +4,15 @@ metadata:
   name: app-ingress
   annotations:
     kubernetes.io/ingress.class: "gce"
-    kubernetes.io/ingress.allow-http: "true"
-    ingress.gcp.kubernetes.io/healthcheck-path: /api/health   # Point to an appropriate health check endpoint
+    kubernetes.io/ingress.global-static-ip-name: "kofia-static-ip"
+    networking.gke.io/managed-certificates: "kofia-managed-cert"
+    kubernetes.io/ingress.allow-http: "false"
+    ingress.gcp.kubernetes.io/healthcheck-path: /api/health
 
 spec:
   rules:
-  - http:
+  - host: 34.111.185.192.nip.io
+    http:
       paths:
       - path: /
         pathType: Prefix
@@ -32,3 +35,31 @@ spec:
             name: dashboard-service
             port:
               number: 80
+  - host: kofia.co.ke
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: frontend-service
+            port:
+              number: 80
+      - path: /api/
+        pathType: Prefix
+        backend:
+          service:
+            name: backend-service
+            port:
+              number: 5000
+      - path: /dashboard/
+        pathType: Prefix
+        backend:
+          service:
+            name: dashboard-service
+            port:
+              number: 80
+
+
+
+

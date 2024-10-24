@@ -8,6 +8,10 @@ import { ShoppingCart, Delete, Favorite } from '@material-ui/icons';
 const Container = styled.div`
   padding: 20px;
   background-color: #f8f9fa;
+
+  @media (max-width: 768px) {
+    padding: 10px;
+  }
 `;
 
 const Title = styled.h2`
@@ -15,12 +19,21 @@ const Title = styled.h2`
   font-weight: 300;
   text-align: center;
   margin-bottom: 20px;
+
+  @media (max-width: 768px) {
+    font-size: 24px;
+  }
 `;
 
 const WishlistContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 20px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+  }
 `;
 
 const WishlistItem = styled.div`
@@ -33,21 +46,37 @@ const WishlistItem = styled.div`
   &:hover {
     transform: translateY(-5px);
   }
+
+  @media (max-width: 768px) {
+    border-radius: 6px;
+  }
 `;
 
 const ItemImage = styled.img`
   width: 100%;
   height: 200px;
-  object-fit: cover;
+  object-fit: contain;
+
+  @media (max-width: 768px) {
+    height: 120px;
+  }
 `;
 
 const ItemInfo = styled.div`
   padding: 15px;
+
+  @media (max-width: 768px) {
+    padding: 10px;
+  }
 `;
 
 const ItemTitle = styled.h3`
   font-size: 18px;
   margin-bottom: 10px;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
 `;
 
 const ButtonContainer = styled.div`
@@ -65,6 +94,11 @@ const Button = styled.button`
 
   &:hover {
     opacity: 0.8;
+  }
+
+  @media (max-width: 768px) {
+    padding: 6px 10px;
+    font-size: 12px;
   }
 `;
 
@@ -85,6 +119,11 @@ const ContinueShoppingButton = styled(Button)`
   font-size: 16px;
   margin: 20px auto;
   display: block;
+
+  @media (max-width: 768px) {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
 `;
 
 const EmptyWishlist = styled.div`
@@ -92,6 +131,11 @@ const EmptyWishlist = styled.div`
   padding: 40px;
   font-size: 18px;
   color: #666;
+
+  @media (max-width: 768px) {
+    padding: 30px;
+    font-size: 16px;
+  }
 `;
 
 const Wishlist = () => {

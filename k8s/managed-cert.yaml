@@ -1,0 +1,8 @@
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: kofia-managed-cert
+spec:
+  domains:
+    - 34.111.185.192.nip.io
+    - kofia.co.ke

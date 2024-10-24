@@ -35,7 +35,7 @@ const Logo = styled.h1`
 
 const Desc = styled.p`
   margin-bottom: 20px;
-  color: #fff;
+  color: #000;
   ${mobile({ textAlign: "center" })} // Center text on small screens
 `;
 
@@ -103,7 +103,7 @@ const DesignerLink = styled.div`
 `;
 
 const StyledLink = styled.a`
-  color: white;
+  color: black;
   text-decoration: none;
   font-size: 0.9rem;
   &:hover {

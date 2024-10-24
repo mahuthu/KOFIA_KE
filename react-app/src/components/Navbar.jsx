@@ -25,7 +25,7 @@ const Left = styled.div`
   display: flex;
   align-items: center;
   @media only screen and (max-width: 380px) {
-    margin-right: 15px; // Add space between search and logo
+  margin-right: 10px; // Add space between search and logo
   }
 `;
 
@@ -49,7 +49,7 @@ const Center = styled.div`
   flex: 1;
   text-align: center;
   @media only screen and (max-width: 380px) {
-    margin-left: 15px; // Add space on the left of the logo
+    margin-left: 10px; // Add space on the left of the logo
   }
 `;
 

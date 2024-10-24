@@ -69,7 +69,7 @@ const Icon = styled.div`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: ${(props) => (props.isWishlisted ? '#ff0000' : 'white')};  // Red if wishlist
+  background-color: ${(props) => (props.isWishlisted ? '#FF69B4' : 'white')};  // Red if wishlist
   display: flex;
   align-items: center;
   justify-content: center;

@@ -21,27 +21,27 @@ const searchRoutes = require('./routes/searchRoutes');
 const allowedOrigins = [
   'http://localhost:5000',   // Local frontend (React)
   'http://34.111.185.192',   // Ingress IP
+  'https://34.111.185.192',   // Ingress IP
   'http://localhost:3000',   // Local frontend (React)
-  'http://localhost:3001'    // Local dashboard
+  'http://localhost:3001',
+  'http://kofia.co.ke',      // Add your production frontend domain
+  'https://kofia.co.ke' ,   // Local dashboard
+  'http://34.111.185.192.nip.io',
+  'https://34.111.185.192.nip.io'
   ];
 
 // CORS configuration with dynamic origin handling
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (e.g., mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-
-    // Check if the request origin is in the allowedOrigins list
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = 'The CORS policy does not allow access from this origin.';
-      return callback(new Error(msg), false);
+    console.log("Request origin:", origin);
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      console.log("Origin not allowed:", origin);
+      callback(new Error('Not allowed by CORS'));
     }
-
-    // Allow the request if the origin is in the allowed list
-    return callback(null, true);
   },
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true, // Allow credentials like cookies or auth headers
+  credentials: true,
   optionsSuccessStatus: 200
 }));
 
