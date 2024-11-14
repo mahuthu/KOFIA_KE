@@ -45,7 +45,7 @@ const Form = styled.form`
 
 const Input = styled.input`
   flex: 1;
-  min-width: 100%;
+  min-width: 80%;
   margin: 10px 0;
   padding: 10px;
   border: 1px solid #ddd;
@@ -101,10 +101,19 @@ const Login = () => {
       <Wrapper>
         <Title>SIGN IN</Title>
         <Form>
-          <Input placeholder="Username" onChange={(e) => setUsername(e.target.value)} />
-          <Input placeholder="Password" type="password" onChange={(e) => setPassword(e.target.value)} />
-          <Button onClick={handleClick} disabled={isFetching}>LOGIN</Button>
-          {error && <Error>Something went wrong</Error>}
+          <Input 
+            placeholder="Username" 
+            onChange={(e) => setUsername(e.target.value)} 
+          />
+          <Input 
+            placeholder="Password" 
+            type="password" 
+            onChange={(e) => setPassword(e.target.value)} 
+          />
+          <Button onClick={handleClick} disabled={isFetching}>
+            LOGIN
+          </Button>
+          {error && <Error>{error}</Error>}
           <StyledLink to="#">DO YOU REMEMBER THE PASSWORD?</StyledLink>
           <StyledLink to="/register">CREATE A NEW ACCOUNT</StyledLink>
         </Form>

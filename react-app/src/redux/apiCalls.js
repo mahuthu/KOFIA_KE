@@ -9,7 +9,19 @@ export const login = async(dispatch, user) => {
         dispatch(loginSuccess(res.data));
     } catch (err) {
         console.error("API error:", err);
-        dispatch(loginFailure());
+        let errorMessage = "An unexpected error occurred";
+        if (err.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            errorMessage = err.response.data.message || err.response.data;
+        } else if (err.request) {
+            // The request was made but no response was received
+            errorMessage = "No response received from server";
+        } else {
+            // Something happened in setting up the request that triggered an Error
+            errorMessage = err.message;
+        }
+        dispatch(loginFailure(errorMessage));
     }   
 }
 

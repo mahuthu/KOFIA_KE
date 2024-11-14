@@ -23,7 +23,7 @@ const allowedOrigins = [
   'http://34.111.185.192',   // Ingress IP
   'https://34.111.185.192',   // Ingress IP
   'http://localhost:3000',   // Local frontend (React)
-  'http://localhost:3001',
+  'http://localhost:5160',
   'http://kofia.co.ke',      // Add your production frontend domain
   'https://kofia.co.ke' ,   // Local dashboard
   'http://34.111.185.192.nip.io',

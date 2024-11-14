@@ -1,7 +1,9 @@
 import axios from "axios";
 
 // const BASE_URL = "http://34.111.185.192/api/";
-const BASE_URL = "https://kofia.co.ke/api/";
+//const BASE_URL = "https://kofia.co.ke/api/";
+const BASE_URL = "http://localhost:5000/api/";
+
 
 let TOKEN = null;
 

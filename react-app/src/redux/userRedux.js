@@ -3,26 +3,26 @@ import { createSlice } from "@reduxjs/toolkit";
 const userSlice = createSlice({
     name: "user",
     initialState: {
-        currentUser: JSON.parse(localStorage.getItem("user")) || null,
+        currentUser: null,
         isFetching: false,
-        error: false,
-        isAuthenticated: !!localStorage.getItem("user"),
+        error: null,
+        isAuthenticated: false,
     },
 
     reducers: {
         loginStart: (state) => {
             state.isFetching = true;
+            state.error = null;
         },
         loginSuccess: (state, action) => {
             state.isFetching = false;
             state.currentUser = action.payload;
+            state.error = null;
             state.isAuthenticated = true;
-            localStorage.setItem("user", JSON.stringify(action.payload));
         },
-        loginFailure: (state) => {
+        loginFailure: (state, action) => {
             state.isFetching = false;
-            state.error = true;
-            state.isAuthenticated = false;
+            state.error = action.payload;
         },
         logout: (state) => {
             state.currentUser = null;
@@ -35,7 +35,7 @@ const userSlice = createSlice({
         updateUserSuccess: (state, action) => {
             state.isFetching = false;
             state.currentUser = action.payload;
-            localStorage.setItem("user", JSON.stringify(action.payload));
+            state.error = null;
         },
         updateUserFailure: (state) => {
             state.isFetching = false;
