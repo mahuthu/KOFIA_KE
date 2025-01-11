@@ -25,6 +25,13 @@ FROM nginx:alpine
 # Copy the build output from the previous stage to the Nginx html directory
 COPY --from=build /app/build /usr/share/nginx/html
 
+# Copy SSL certificates (you'll need to have these files in your build context)
+# COPY ./ssl/fullchain.pem /etc/nginx/ssl/
+# COPY ./ssl/privkey.pem /etc/nginx/ssl/
+
+# Copy nginx configuration
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 # Expose port 80
 EXPOSE 80
 
