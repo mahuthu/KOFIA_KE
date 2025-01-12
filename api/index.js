@@ -20,21 +20,28 @@ const searchRoutes = require('./routes/searchRoutes');
 // Define allowed origins
 const allowedOrigins = [
   'http://localhost:5000',   // Local frontend (React)
-  'http://34.111.185.192',   // Ingress IP
-  'https://34.111.185.192',   // Ingress IP
+  // 'http://34.111.185.192',   // Ingress IP
+  // 'https://34.111.185.192',   // Ingress IP
   'http://localhost:3000',   // Local frontend (React)
   'http://localhost:5160',
   'http://kofia.co.ke',      // Add your production frontend domain
   'https://kofia.co.ke' ,   // Local dashboard
-  'http://34.111.185.192.nip.io',
-  'https://34.111.185.192.nip.io'
+  // 'http://34.111.185.192.nip.io',
+  // 'https://34.111.185.192.nip.io'
+  'http://admin.kofia.co.ke',
+  'https://admin.kofia.co.ke'
   ];
 
 // CORS configuration with dynamic origin handling
+
 app.use(cors({
   origin: function (origin, callback) {
     console.log("Request origin:", origin);
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) {
+      return callback(null, true);
+    }
+    if (allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
       console.log("Origin not allowed:", origin);
@@ -44,6 +51,19 @@ app.use(cors({
   credentials: true,
   optionsSuccessStatus: 200
 }));
+// app.use(cors({
+//   origin: function (origin, callback) {
+//     console.log("Request origin:", origin);
+//     if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+//       callback(null, true);
+//     } else {
+//       console.log("Origin not allowed:", origin);
+//       callback(new Error('Not allowed by CORS'));
+//     }
+//   },
+//   credentials: true,
+//   optionsSuccessStatus: 200
+// }));
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URL)
