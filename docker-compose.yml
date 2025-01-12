@@ -32,6 +32,7 @@ services:
   nginx:
     image: nginx:latest
     container_name: nginx
+    command: [nginx-debug, '-g', 'daemon off;']  # Add this line
     ports:
       - "80:80"
       - "443:443"
