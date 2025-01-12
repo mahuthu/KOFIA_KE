@@ -53,6 +53,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "5000:5000"
+    networks:
+      - app-network    
     environment:
       - MONGO_URL=${MONGO_URL}
       - PASS_SEC=${PASS_SEC}
@@ -67,6 +69,8 @@ services:
 
   mongo:
     image: mongo:4.4
+    networks:
+      - app-network  
     ports:
       - "27017:27017"
     volumes:
